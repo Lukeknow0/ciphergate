@@ -47,12 +47,12 @@ The owner and auditor are privileged readers. The Handle Gateway receives encode
 
 ## Abuse cases and expected controls
 
-1. **Malformed or incorrectly bound proof:** `Nox.fromExternal` should reject it. The test exists conceptually but has not run because the official Nox Docker stack is blocked.
+1. **Malformed or incorrectly bound proof:** `Nox.fromExternal` rejects it in the passing official Nox Docker E2E, including wrong-wallet and wrong-contract submissions.
 2. **Non-owner auditor change:** custom `NotOwner` revert; covered by the local unit tests. Policy v1 cannot be changed after deployment.
 3. **Zero auditor:** custom `InvalidAuditor` revert; covered by the local unit tests.
 4. **Unauthorized or repeated evaluation:** custom `NotOwnerOrAuditor` / `DecisionAlreadyEvaluated` reverts. **Invalid publication:** `publishDecision()` accepts no enum, checks public-decryptability, and verifies the supplied Nox proof for the current decision handle.
 5. **Proposal construction for non-PASS, wrong action, or expired action:** the contract gate requires PASS, exact commitment equality, and a live deadline; the browser recomputes the commitment before export.
-6. **Unauthorized attribute decryption:** the official-stack test is implemented but not yet executed. The normalized decision is intentionally public; the attributes are not.
+6. **Unauthorized attribute decryption:** the passing official-stack E2E confirms that the submitter cannot privately decrypt the protected amount and that the amount is not publicly decryptable. It also verifies owner viewer access and submitter viewer denial for all three attributes. The normalized decision is intentionally public; the attributes are not.
 7. **Sensitive plaintext in events:** the ABI/event surface check rejects sensitive attribute field names. This is a narrow static check, not a complete trace/storage privacy proof.
 8. **Proof/identifier replay:** reuse of the same submitter-scoped audit ID or exact three-handle bundle reverts. This does not prevent a submitter from encrypting the same plaintext again into fresh handles.
 
@@ -65,7 +65,7 @@ Consequences and limits:
 - Any account may relay a valid proof, but no relayer can choose PASS/REVIEW/BLOCK.
 - A proof for another handle or malformed proof must fail NoxCompute verification.
 - The Safe export path also checks the stored action commitment and deadline; an actual Safe import and signer review remain mandatory.
-- This binding is implemented and compiles, but its full Docker-backed proof path remains unverified until the official Nox stack test runs.
+- This binding is exercised by the passing official Nox Docker E2E: a stranger relays a valid public-decryption proof, malformed and cross-intent proofs fail, and repeated publication is rejected.
 
 ## Residual risks
 
@@ -79,7 +79,7 @@ Consequences and limits:
 - An exported JSON file can be copied. The browser re-checks the live nonce and deadline before each export, but cannot control a file after download. Safe owners must verify the expected nonce/deadline and exact transaction before signing.
 - A proof-verified PASS can be queried until its deadline for the same commitment. CipherGate does not mark a commitment consumed because it does not observe Safe execution.
 - The proposal JSON has not yet been validated through an actual Safe import/API path; no claim of end-to-end Safe enforcement is made.
-- The official Nox integration tests have not run, so cryptographic/ACL behavior is not yet evidenced for CipherGate.
+- The local official Nox integration now passes with two cases and `2 passing (2 nodejs)`, evidencing the covered proof, ACL, replay, publication, strict-boundary, and action-gate behavior. CipherGate is still not deployed to Sepolia, and neither the production browser flow nor an actual Safe JSON import has been validated. The separate Hello World Sepolia address is onboarding evidence, not a CipherGate deployment.
 - Dependencies are version-pinned, the installed tree matches the synchronized lockfile, and all 202/202 dependency entries contain official-registry `resolved` URLs plus `integrity` digests. The exact current revision passed an isolated official-registry `npm ci` plus `npm run check`. The online audit still reports 16 development/transitive findings (0 critical, 2 high, 6 moderate, 8 low) through the pinned Nox/Hardhat path; no compatible direct fix exists and no blanket fix was applied.
 
 ## Out of scope

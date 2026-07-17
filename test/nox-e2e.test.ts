@@ -22,6 +22,7 @@ describe("CipherGate Nox end-to-end", () => {
       const { viem } = await nox.connect();
       const publicClient = await viem.getPublicClient();
       const [owner, submitter, stranger] = await viem.getWalletClients();
+      submitter.getAddresses = async () => [submitter.account.address];
       const firewall = await viem.deployContract("ConfidentialIntentFirewall");
 
       const clientConfig = {
@@ -310,6 +311,7 @@ describe("CipherGate Nox end-to-end", () => {
       const { viem } = await nox.connect();
       const publicClient = await viem.getPublicClient();
       const [owner, submitter] = await viem.getWalletClients();
+      submitter.getAddresses = async () => [submitter.account.address];
       const firewall = await viem.deployContract("ConfidentialIntentFirewall");
       const handleClient = await createViemHandleClient(submitter, {
         gatewayUrl: handleGatewayUrl(),

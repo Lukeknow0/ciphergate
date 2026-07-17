@@ -157,11 +157,19 @@ Coverage boundaries:
 - `test:surface` is an ABI/event-name check. It does not inspect transaction traces, storage, timing, gas, or all possible metadata leakage.
 - The production build is deliberately not counted as passing because no non-zero deployed `CIPHERGATE_CONTRACT_ADDRESS` exists.
 
-## E-010 — Nox Docker E2E blocker
+<a id="e-010--nox-docker-e2e-blocker"></a>
 
-**Status:** BLOCKED BEFORE TEST EXECUTION
+## E-010 — Nox Docker E2E
 
-The implemented `test/nox-e2e.test.ts` is designed to prove:
+**Status:** VERIFIED — FRESH OFFICIAL-STACK RUN EXITED ZERO
+
+A fresh `npm run test:nox` run started the official Nox Docker stack, executed both Node.js test cases, and exited `0`. The terminal printed a `✔` result for each case and ended with:
+
+```text
+2 passing (2 nodejs)
+```
+
+The first passing case, `keeps attributes private but discloses the decision to the submitter`, covers:
 
 - encryption proofs are bound to the submitting wallet and target contract;
 - same-submitter action-commitment/audit-ID replay and exact encrypted-input-bundle replay are rejected;
@@ -170,10 +178,15 @@ The implemented `test/nox-e2e.test.ts` is designed to prove:
 - the normalized decision is publicly decryptable and a stranger may relay its valid proof without selecting the enum;
 - a proof for one intent cannot publish another intent;
 - two different private inputs that both resolve to REVIEW normalize to the same public decision, fixed policy metadata, and closed gate while retaining different encrypted amount handles;
-- six strict Solidity comparison-boundary cases produce the expected PASS/REVIEW/BLOCK result;
 - only PASS opens the gate for the exact stored action commitment, while a mismatched commitment stays closed.
 
-Observed startup failure:
+The second passing case, `executes the Solidity policy at every strict comparison boundary`, exercises six on-chain encrypted-policy vectors: amount `10,000` versus `10,001`, risk `50`, `51`, `80`, and `81`, and non-zero counterparty flags. Each produced the expected PASS/REVIEW/BLOCK result.
+
+Hardhat's shared-RPC wallet clients return every account from `getAddresses()` by default, while `@iexec-nox/handle` selects the first returned address. The E2E therefore binds the submitter client's `getAddresses()` result to `[submitter.account.address]`. This is a test-environment account-selection adapter; it does not replace Nox encryption, proof validation, ACL enforcement, encrypted computation, public-decryption proof verification, or product behavior with a mock.
+
+The official images are now present locally. Docker Desktop's Containers proxy was configured manually to complete image acquisition and the run. Afterward it was restored to `Same as host proxy`, Docker Desktop was fully restarted, and both the UI and CLI verified `Engine running` with no residual Nox containers.
+
+Earlier attempts are retained as historical troubleshooting evidence. The plugin initially surfaced only:
 
 ```text
 Error: [nox] Failed to start the offchain stack: [object Object]
@@ -181,7 +194,7 @@ Error: [nox] Failed to start the offchain stack: [object Object]
 
 During the initial proxy-mode attempts, Docker Desktop used `System proxy` with Containers proxy set to `Same as host proxy`. Its `httpproxy.log` showed image-pull CONNECT requests routed through the local static HTTPS proxy `http://127.0.0.1:1082`; that path repeatedly returned HTTP 503 and truncated CloudFront layer streams. Three `docker pull nats:2.12-alpine` attempts failed with two `short read ... unexpected EOF` errors and one registry-referrers `Service Unavailable` response.
 
-On 2026-07-17, an authorized controlled retry set Containers proxy to `No proxy`, fully restarted Docker Desktop, and verified that the setting survived restart before running `npm run test:nox`. Docker's proxy log recorded seven stack-image connections to `registry-1.docker.io` as `container via direct connection because Docker Desktop has no HTTPS proxy`, confirming that this attempt did not reuse the containers proxy. Compose reported `iexechub/nox-ingestor:0.6.0` first and canceled the other six pulls immediately afterward. The command failed during `Starting Nox offchain stack...`, before any test assertion. No Nox container or image remained, and the plugin-written `offchain-services.log` was 0 bytes.
+On 2026-07-17, an authorized controlled retry set Containers proxy to `No proxy`, fully restarted Docker Desktop, and verified that the setting survived restart before running `npm run test:nox`. Docker's proxy log recorded seven stack-image connections to `registry-1.docker.io` as `container via direct connection because Docker Desktop has no HTTPS proxy`, confirming that this attempt did not reuse the containers proxy. Compose reported `iexechub/nox-ingestor:0.6.0` first and canceled the other six pulls immediately afterward. That historical command failed during `Starting Nox offchain stack...`, before any test assertion. At that point no Nox container or image remained, and the plugin-written `offchain-services.log` was 0 bytes.
 
 Immediately afterward, Containers proxy was restored to `Same as host proxy`, Docker Desktop was fully restarted, and both the restored setting and `Engine running` state were verified. A read-only registry check then reproduced the no-proxy image-acquisition failure exactly:
 
@@ -189,9 +202,9 @@ Immediately afterward, Containers proxy was restored to `Same as host proxy`, Do
 ERROR: failed to do request: Head "https://registry-1.docker.io/v2/iexechub/nox-ingestor/manifests/0.6.0": tls: failed to verify certificate: x509: certificate is valid for gamma-cell-1-lambda.us-east-1.api.aws, *.gamma-cell-1-api-lambda.us-east-1.api.aws, not registry-1.docker.io
 ```
 
-Local DNS resolved `registry-1.docker.io` to `3.230.235.129` for this check. The compose configuration remains valid, and the official Nox `0.6.0` tags expose active `linux/arm64` manifests. These checks rule out invalid compose syntax, missing image tags, and an Apple Silicon architecture mismatch for the observed failure. The direct path removed the initial local proxy's 503/truncation failure but exposed a separate DNS/routing/TLS certificate mismatch; the plugin hides that nested Docker/Compose detail as `[object Object]`.
+Local DNS resolved `registry-1.docker.io` to `3.230.235.129` for that check. The compose configuration was valid, and the official Nox `0.6.0` tags exposed active `linux/arm64` manifests. Those checks ruled out invalid compose syntax, missing image tags, and an Apple Silicon architecture mismatch for the historical failure. The direct path removed the initial local proxy's 503/truncation failure but exposed a separate DNS/routing/TLS certificate mismatch; the plugin hid that nested Docker/Compose detail as `[object Object]`.
 
-Conclusion: no Nox E2E assertion ran. Do not label privacy/ACL/proof/replay integration as passing until the official offchain stack starts and `npm run test:nox` exits zero.
+Conclusion: the earlier proxy/DNS/TLS failures are resolved for the current evidence run and are not a current blocker. The local official-stack integration claims above are now supported by an exit-zero execution. This does not establish a CipherGate Sepolia deployment, live product browser flow, actual Safe JSON import, or public release; the Hello World Sepolia address in E-005 is a separate onboarding contract and must not be presented as CipherGate.
 
 ## E-011 — Dependency lock synchronization
 
@@ -248,9 +261,9 @@ Required closure evidence:
 
 ## E-014 — Proof-bound decision and browser integration
 
-**Status:** LOCAL BUILD AND UNIT/STATIC CHECKS VERIFIED; LIVE NOX/SEPOLIA FLOW PENDING
+**Status:** LOCAL OFFICIAL NOX E2E, BUILD, AND UNIT/STATIC CHECKS VERIFIED; LIVE CIPHERGATE SEPOLIA/BROWSER FLOW PENDING
 
-At 2026-07-17 CST, the local security design and browser adapter have these verified source-level properties:
+At 2026-07-17 CST, the local security design, official-stack integration, and browser adapter have these verified properties:
 
 - Policy v1 is compile-time fixed: version `1`, hash `0xd9b7aa2496e739c17db5c0c551eeb5089cb8ec567dcb61f6e5290ea0ddf05802`, fixed thresholds, and no policy mutation function.
 - Every submission stores a non-zero, deployment-domain-separated Safe action commitment and a future deadline of at most seven days, rejects same-submitter commitment/audit-ID reuse and exact input-handle-bundle replay, and records the auditor active at submission. Commitment replay state is submitter-scoped so copying a pending hash cannot block the original submitter through a global marker.
@@ -259,7 +272,7 @@ At 2026-07-17 CST, the local security design and browser adapter have these veri
 - Evaluation and publication are one-time operations.
 - `safeProposalAllowed(intentId, commitment)` opens only for proof-published PASS, exact commitment equality, and a live deadline.
 - The public-surface test asserts the proof-only ABI, fixed policy, action-bound gate, required Nox proof calls, and absence of sensitive event field names.
-- The Docker-backed E2E coverage is enumerated in E-010; none of those assertions has executed yet.
+- The fresh Docker-backed E2E in E-010 executed both test cases on the official Nox stack and exited zero, covering wallet/contract proof binding, private-attribute ACL negatives, malformed/cross-intent/replay rejection, one-time evaluation/publication, proof-bound public decisions, six strict Solidity boundaries, and exact/mismatched action gating.
 
 The browser implementation uses `@iexec-nox/handle` plus viem to connect on Sepolia, verify deployed Safe code and its live nonce, commit the exact Safe action, obtain three handle/proof pairs, submit an intent, evaluate it, fetch/relay the public-decryption proof, and export a PASS-only checksummed Safe Transaction Builder batch. It generates opaque audit IDs, clears sensitive inputs after confirmation, and recomputes the commitment immediately before export. Session/epoch checks and pinned-block reads prevent stale asynchronous work from overwriting newer wallet/chain state. The preview build intentionally remains unconfigured until a CipherGate deployment address is supplied.
 
@@ -275,6 +288,7 @@ npm run test:safe       PASS (9/9)
 npm run vectors         PASS (5/5)
 npm run build:frontend:preview  PASS (explicit unconfigured mode)
 npm run test:surface    PASS
+npm run test:nox        PASS (2 passing (2 nodejs), fresh exit 0)
 ego-browser desktop/mobile unconfigured QA  PASS
 ```
 

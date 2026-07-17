@@ -2,7 +2,7 @@
 
 CipherGate is a pre-execution policy layer for treasury intents. It uses iExec Nox encrypted values to evaluate an amount, risk score, and counterparty flags before an exact, precommitted Safe action may be exported for human review.
 
-> **Current status (2026-07-17): security-hardened local integration build, not a live CipherGate deployment.** The contract compiles and the current non-Docker unit/static/preview-build checks are green. The official `npm run test:nox` command has been attempted, including after setting Containers proxy to `No proxy` and fully restarting Docker Desktop, but local Docker Registry TLS/DNS routing prevents the official images from being acquired and the offchain stack from starting; no E2E assertion has executed. The separate official Nox Hello World deployment and encrypted deposit smoke test are live on Sepolia.
+> **Current status (2026-07-17): security-hardened local integration build with the official Docker-backed Nox E2E passing; not a live CipherGate deployment or submission-ready release.** The contract and current non-Docker unit/static/preview-build checks are green, and `npm run test:nox` now exits zero with two green cases and `2 passing (2 nodejs)` against the official Nox stack. CipherGate itself is still not deployed on Sepolia, the production browser flow has not run against a live CipherGate, the advisory Safe JSON has not been imported into an actual Safe, and no public release exists. The separate official Nox Hello World deployment and encrypted deposit smoke test are live on Sepolia.
 
 ## What exists today
 
@@ -10,7 +10,8 @@ CipherGate is a pre-execution policy layer for treasury intents. It uses iExec N
 - The fixed policy is identified by `policyVersion = 1` and `policyHash = 0xd9b7aa2496e739c17db5c0c551eeb5089cb8ec567dcb61f6e5290ea0ddf05802`; there is no policy mutation function.
 - Each intent binds a domain-separated commitment over chain ID, the verifying CipherGate deployment, Safe address, destination, value, calldata hash, expected Safe nonce, and deadline. The deadline must be in the future and no more than seven days away.
 - Submission rejects a reused action commitment or audit ID for the same submitter, and rejects an exact encrypted-input bundle replay. Action-commitment uniqueness is deliberately submitter-scoped so another address cannot copy a pending commitment and consume a global marker. Evaluation and publication are each one-time operations, and private-attribute access is fixed to the owner and submission-time auditor.
-- `test/nox-e2e.test.ts` implements wallet/contract proof binding, private-attribute ACL checks, input/audit replay rejection, public-decision proof retrieval, malformed/cross-intent proof rejection, one-time evaluation/publication, strict policy boundaries, and exact-action gate checks against the official Docker-backed Nox stack. These assertions have not executed because the stack cannot start.
+- `test/nox-e2e.test.ts` passes against the official Docker-backed Nox stack. Its two cases exercise real wallet/contract proof binding, private-attribute ACL negatives, proof retrieval and malformed/cross-intent proof rejection, action/audit/input replay rejection, one-time evaluation/publication, exact/mismatched action gating, and six strict Solidity comparison boundaries.
+- The Hardhat shared RPC helper exposes multiple accounts from `getAddresses()`. In the E2E harness, each submitter wallet client's `getAddresses()` is therefore bound to that client's `account.address`, ensuring the Nox handle proof is made for the intended submitter. This is a test-environment wallet adapter, not a production mock of Nox or CipherGate.
 - `frontend/` uses the official Nox handle client and viem for wallet connection, three handle/proof requests, submission, encrypted evaluation, public-decision proof retrieval/publication, and PASS-only Safe batch export. The unconfigured preview build is tested; a production build requires a non-zero deployed CipherGate address.
 - `frontend/src/safeProposal.js` verifies deployed Safe code and the exact live `nonce()`, recomputes the action commitment before export, and emits the checksummed Safe Transaction Builder v1 shape. The JSON is advisory: it does not enforce execution and is not a Safe Guard or Module.
 - The canonical `ConfidentialPiggyBank` tutorial contract is deployed on Sepolia at [`0x372Be2…B2EC0`](https://sepolia.etherscan.io/address/0x372Be24349fC9162fa45b85c84027059789B2EC0). A bytecode-identical duplicate at [`0xfd574b…dae4`](https://sepolia.etherscan.io/address/0xfd574bd565eda11ced8e92b0981806857e12dae4) is recorded only as deployment history and is not used by development or submission materials. This is onboarding evidence, not the CipherGate product deployment.
@@ -67,9 +68,10 @@ npm run vectors
 npm run test:surface
 npm run test:docs
 npm run build:frontend:preview
+npm run test:nox
 ```
 
-`npm run build:frontend` is the release build and intentionally fails until `CIPHERGATE_CONTRACT_ADDRESS` is a non-zero deployed address. `npm run test:nox` starts the official Nox Docker stack and performs the real encryption/decryption and ACL test; it is intentionally separate from the fast checks.
+`npm run build:frontend` is the release build and intentionally fails until `CIPHERGATE_CONTRACT_ADDRESS` is a non-zero deployed address. `npm run test:nox` starts the official Nox Docker stack and performs the real encryption/decryption, ACL, proof, replay, publication, boundary, and exact-action tests; it is intentionally separate from the fast checks. The current run exits zero with two checkmarks and `2 passing (2 nodejs)`.
 
 ### Verification snapshot
 
@@ -83,7 +85,7 @@ npm run build:frontend:preview
 | ABI/action-bound public-surface check | PASS | [E-009](EVIDENCE.md#e-009--local-non-docker-test-snapshot) |
 | Unconfigured frontend preview build | PASS | [E-009](EVIDENCE.md#e-009--local-non-docker-test-snapshot) |
 | Unconfigured desktop/mobile browser QA | PASS; fail-closed controls, no horizontal overflow, license links served | [E-014](EVIDENCE.md#e-014--proof-bound-decision-and-browser-integration) |
-| Official Nox Docker E2E | BLOCKED during offchain stack startup; 0 assertions executed | [E-010](EVIDENCE.md#e-010--nox-docker-e2e-blocker) |
+| Official Nox Docker E2E | PASS, 2/2 (`2 passing (2 nodejs)`) | [E-010](EVIDENCE.md#e-010--nox-docker-e2e) |
 | Dependency tree and lockfile consistency | PASS (`npm ls --depth=0`) | [E-011](EVIDENCE.md#e-011--dependency-lock-synchronization) |
 | Lockfile artifact metadata | PASS, 202/202 dependency entries contain `resolved` and `integrity` | [E-011](EVIDENCE.md#e-011--dependency-lock-synchronization) |
 | Official npm-registry isolated `npm ci` + aggregate check for this exact revision | PASS | [E-011](EVIDENCE.md#e-011--dependency-lock-synchronization) |

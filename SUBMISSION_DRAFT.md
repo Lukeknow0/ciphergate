@@ -47,11 +47,11 @@ CipherGate separates confidential evaluation from signing and execution:
 ## What is implemented
 
 - Compiling Solidity contract with encrypted inputs, fixed versioned policy metadata, action/deadline binding, ACL grants, replay checks, one-time evaluation/publication, and proof-derived public decisions.
-- Five dependency-free policy vectors plus six strict comparison-boundary vectors in the Docker E2E source.
+- Five dependency-free policy vectors plus six passing strict comparison-boundary vectors on the official Nox Docker stack.
 - Four contract access/metadata/commitment tests and a static ABI/action/event public-surface check.
 - Nine browser Nox-adapter tests.
 - Nine commitment-bound Safe adapter tests, including a fixed checksum oracle, all action-field mutations, range/deadline checks, deployed Safe code/live nonce, and UNKNOWN/REVIEW/BLOCK rejection.
-- Official-stack E2E source for wallet/contract proof binding, ACL denial, replay rejection, public result proofs, malformed/cross-intent proofs, one-time operations, same-output REVIEW normalization, policy boundaries, and exact/mismatched commitments.
+- Passing official-stack E2E for wallet/contract proof binding, attribute confidentiality and ACL negatives, replay rejection, proof-bound public decisions, malformed/cross-intent proofs, one-time evaluation/publication, same-output REVIEW normalization, six strict Solidity policy boundaries, and exact/mismatched action gates.
 - Browser bundle wired to the official Nox handle client and viem for prepare/submit/evaluate/prove/publish/export, with opaque audit IDs and stale-session/race recovery.
 - MIT license, provenance/third-party notices, pinned CI definition, `.nvmrc`, `.env.example`, and unexecuted Sepolia deploy/read-only-smoke helpers.
 - Reviewed initial commit created in the local `main` repository; no public remote or release tag yet.
@@ -65,6 +65,7 @@ CipherGate separates confidential evaluation from signing and execution:
 - Browser adapter tests: PASS, 9/9
 - Safe adapter tests: PASS, 9/9
 - Policy vectors: PASS, 5/5
+- Official Nox Docker E2E: PASS, fresh exit `0`; two `✔` cases and `2 passing (2 nodejs)`
 - ABI/action/event surface check: PASS
 - Explicitly unconfigured frontend preview build: PASS
 - Explicitly unconfigured desktop/mobile browser QA: PASS (fail-closed controls, responsive layout, license links)
@@ -76,9 +77,9 @@ The canonical Hello World address is `0x372Be24349fC9162fa45b85c84027059789B2EC0
 
 ## Known limitations to disclose
 
-- The official Nox E2E assertions have not executed because the official offchain stack still fails during startup, including after a controlled `No proxy` plus full Docker restart retry; no substitute images or mocks are claimed.
+- The official Nox Docker E2E now passes locally. Hardhat shared-RPC wallet clients expose all accounts through `getAddresses()`, while `@iexec-nox/handle` selects the first, so the tests bind the submitter client's result to its configured `submitter.account.address`. This is test-environment account selection, not a cryptographic or product mock.
 - Input encryption is a trusted-gateway flow: the SDK posts the encoded value to the Nox Handle Gateway over TLS. The project does not claim purely local/browser-side encryption.
-- The proof-bound/replay/action-bound paths compile and have unit/static coverage, but their real Nox cryptographic/ACL paths require the blocked Docker run.
+- The passing local official-stack run validates the Nox proof/ACL/replay/action-bound paths in the Docker environment; it does not substitute for a deployed CipherGate contract and live product browser flow on Sepolia.
 - The encrypted amount is a submitter-provided attribute. Nox proves which encrypted value was evaluated, but v1 has no oracle or attestation proving it equals the committed Safe native value.
 - Commitment replay state is submitter-scoped to prevent copied-mempool-hash denial of service. Different accounts can create separate intents for the same Safe action because v1 does not verify a Safe-owner signature or allowlist; reviewers must confirm the JSON verifier, intent ID, and on-chain submitter.
 - Transaction Builder JSON is advisory and cannot enforce the expected Safe nonce/deadline after download. A Guard/Module consuming the same commitment would be required for execution-time enforcement.
@@ -87,6 +88,7 @@ The canonical Hello World address is `0x372Be24349fC9162fa45b85c84027059789B2EC0
 - The exact current revision passed an isolated official-registry `npm ci` plus the complete aggregate check.
 - The current online dependency audit still reports 16 development/transitive findings (0 critical, 2 high, 6 moderate, 8 low). They flow through the pinned Nox/Hardhat path and have no compatible direct fix; no blanket audit fix was applied because it could break the required integration stack.
 - CipherGate has not been deployed to Sepolia, tagged as a release, or published; only a reviewed local source commit exists.
+- The successful Hello World Sepolia contract and deposit are onboarding evidence only; that address is not CipherGate and must not fill the pending CipherGate deployment field.
 
 ## Required before submission
 
@@ -95,7 +97,7 @@ The canonical Hello World address is `0x372Be24349fC9162fa45b85c84027059789B2EC0
 - [x] Synchronize manifest/lock metadata and verify the installed dependency tree.
 - [x] Run an official-registry isolated `npm ci` plus complete aggregate check for the exact release candidate.
 - [x] Verify 202/202 lockfile dependency entries contain `resolved` and `integrity` metadata.
-- [ ] Run the official Nox Docker E2E with zero failures; capture invalid/cross-proof, replay, ACL, same-output, and exact-action evidence.
+- [x] Run the official Nox Docker E2E with zero failures; capture invalid/cross-proof, replay, ACL, same-output, exact-action, and strict-boundary evidence (`2 passing (2 nodejs)`).
 - [x] Complete fail-closed desktop/mobile browser QA of the unconfigured preview.
 - [x] Review the complete diff/secret scan and create a clean local source commit.
 - [ ] Add an evidence export and screenshot manifest.

@@ -1,6 +1,6 @@
 # Four-minute demo script
 
-> **Recording gate:** do not record the final demo until the official Nox E2E, exact-revision clean install, production browser flow, advisory Safe import, and CipherGate Sepolia smoke test are complete. Never present the Hello World address as CipherGate.
+> **Recording gate:** do not record the final demo until the exact-revision clean install, production browser flow, advisory Safe import, and CipherGate Sepolia smoke test are complete. The official Nox Docker E2E gate is now cleared. Never present the Hello World address as CipherGate.
 
 ## Pre-record checklist
 
@@ -31,11 +31,11 @@
 
 4. **1:30–2:05 — Evaluate and prove**
 
-   Run encrypted policy evaluation, fetch the publicly decryptable normalized result and Nox proof, then relay it to the contract. Briefly show the official-stack test evidence for unauthorized evaluation/decryption and malformed/cross-intent/repeated proofs. Use this segment only after that test has actually passed.
+   Run encrypted policy evaluation, fetch the publicly decryptable normalized result and Nox proof, then relay it to the contract. Briefly show the official-stack `npm run test:nox` evidence—two green cases and `2 passing (2 nodejs)`—for unauthorized evaluation/decryption and malformed/cross-intent/repeated proofs.
 
 5. **2:05–2:35 — Policy boundaries and replay resistance**
 
-   Show the five green dependency-free vectors and the passed strict Solidity boundaries. Explain: amount above 10,000, risk above 80, or any flag → BLOCK; otherwise risk above 50 → REVIEW; otherwise PASS. Show the tests rejecting action-commitment, audit-ID, and exact-input-bundle reuse plus repeated evaluation/publication.
+   Show the five green dependency-free vectors and all six passed strict Solidity boundaries from the official Nox flow. Explain: amount above 10,000, risk above 80, or any flag → BLOCK; otherwise risk above 50 → REVIEW; otherwise PASS. Show the tests rejecting action-commitment, audit-ID, and exact-input-bundle reuse plus repeated evaluation/publication.
 
 6. **2:35–3:20 — Exact-action PASS export**
 
