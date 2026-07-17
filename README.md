@@ -2,7 +2,7 @@
 
 CipherGate is a pre-execution policy layer for treasury intents. It uses iExec Nox encrypted values to evaluate an amount, risk score, and counterparty flags before an exact, precommitted Safe action may be exported for human review.
 
-> **Current status (2026-07-17): security-hardened local integration build, not a live CipherGate deployment.** The contract compiles and the current non-Docker unit/static/preview-build checks are green. The official Nox end-to-end test is implemented but has not run because Docker Desktop cannot currently pull the official stack images from Docker Hub. The separate official Nox Hello World deployment and encrypted deposit smoke test are live on Sepolia.
+> **Current status (2026-07-17): security-hardened local integration build, not a live CipherGate deployment.** The contract compiles and the current non-Docker unit/static/preview-build checks are green. The official `npm run test:nox` command has been attempted, including after setting Containers proxy to `No proxy` and fully restarting Docker Desktop, but local Docker Registry TLS/DNS routing prevents the official images from being acquired and the offchain stack from starting; no E2E assertion has executed. The separate official Nox Hello World deployment and encrypted deposit smoke test are live on Sepolia.
 
 ## What exists today
 
@@ -83,7 +83,7 @@ npm run build:frontend:preview
 | ABI/action-bound public-surface check | PASS | [E-009](EVIDENCE.md#e-009--local-non-docker-test-snapshot) |
 | Unconfigured frontend preview build | PASS | [E-009](EVIDENCE.md#e-009--local-non-docker-test-snapshot) |
 | Unconfigured desktop/mobile browser QA | PASS; fail-closed controls, no horizontal overflow, license links served | [E-014](EVIDENCE.md#e-014--proof-bound-decision-and-browser-integration) |
-| Official Nox Docker E2E | BLOCKED before stack startup | [E-010](EVIDENCE.md#e-010--nox-docker-e2e-blocker) |
+| Official Nox Docker E2E | BLOCKED during offchain stack startup; 0 assertions executed | [E-010](EVIDENCE.md#e-010--nox-docker-e2e-blocker) |
 | Dependency tree and lockfile consistency | PASS (`npm ls --depth=0`) | [E-011](EVIDENCE.md#e-011--dependency-lock-synchronization) |
 | Lockfile artifact metadata | PASS, 202/202 dependency entries contain `resolved` and `integrity` | [E-011](EVIDENCE.md#e-011--dependency-lock-synchronization) |
 | Official npm-registry isolated `npm ci` + aggregate check for this exact revision | PASS | [E-011](EVIDENCE.md#e-011--dependency-lock-synchronization) |

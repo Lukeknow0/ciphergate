@@ -76,7 +76,7 @@ The canonical Hello World address is `0x372Be24349fC9162fa45b85c84027059789B2EC0
 
 ## Known limitations to disclose
 
-- The official Nox E2E assertions have not executed because Docker Desktop cannot pull the official stack images; no substitute images or mocks are claimed.
+- The official Nox E2E assertions have not executed because the official offchain stack still fails during startup, including after a controlled `No proxy` plus full Docker restart retry; no substitute images or mocks are claimed.
 - Input encryption is a trusted-gateway flow: the SDK posts the encoded value to the Nox Handle Gateway over TLS. The project does not claim purely local/browser-side encryption.
 - The proof-bound/replay/action-bound paths compile and have unit/static coverage, but their real Nox cryptographic/ACL paths require the blocked Docker run.
 - The encrypted amount is a submitter-provided attribute. Nox proves which encrypted value was evaluated, but v1 has no oracle or attestation proving it equals the committed Safe native value.

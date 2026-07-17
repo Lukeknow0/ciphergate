@@ -6,7 +6,7 @@
 
 ## Current verdict
 
-CipherGate is a compiling local integration build with green current non-Docker unit/static/preview-build checks. It is **not submission-ready**: the official Nox E2E test is blocked before startup by Docker Hub image-pull failures, the browser flow has not been exercised against a live CipherGate deployment, the advisory Safe JSON has not been imported through an actual Safe, and CipherGate has not been deployed to Sepolia.
+CipherGate is a compiling local integration build with green current non-Docker unit/static/preview-build checks. It is **not submission-ready**: the official Nox E2E is blocked during offchain-stack startup before any assertion executes, the browser flow has not been exercised against a live CipherGate deployment, the advisory Safe JSON has not been imported through an actual Safe, and CipherGate has not been deployed to Sepolia.
 
 The separate official Hello World journey is complete and independently evidenced on Sepolia. It is not product-deployment evidence.
 
@@ -40,9 +40,13 @@ The separate official Hello World journey is complete and independently evidence
 
 ### B-001 — Official Nox stack cannot start
 
-`npm run test:nox` reaches the plugin stack-start step, then fails before containers are created. Docker Desktop is using system proxy mode; its proxy log shows image-pull CONNECT traffic routed through the local HTTPS proxy at `127.0.0.1:1082`, which returns HTTP 503 responses and truncates CloudFront layer streams. Repeated `docker pull nats:2.12-alpine` attempts ended in `unexpected EOF`/`short read` or `Service Unavailable`.
+`npm run test:nox` reaches `Starting Nox offchain stack...`, then returns `Error: [nox] Failed to start the offchain stack: [object Object]` before any E2E assertion executes.
 
-Compose configuration validates, and the official Nox `0.6.0` image tags expose `linux/arm64` manifests. The evidence isolates the observed blocker to the local Docker Desktop proxy path rather than project configuration, missing tags, or host architecture.
+Initial runs with Docker Desktop proxy set to `System proxy` and Containers proxy set to `Same as host proxy` showed HTTP 503/truncated image-pull traffic through `127.0.0.1:1082`. An authorized controlled retry changed only Containers proxy to `No proxy`, fully restarted Docker Desktop, verified that the setting survived restart, and reran the command. Docker's proxy log confirmed that the seven official stack pulls then used direct connections to `registry-1.docker.io`, but the plugin still failed during the same stack-start phase. The original `Same as host proxy` setting was immediately restored, Docker Desktop was fully restarted again, and both the restored setting and running engine were verified.
+
+The first no-proxy pull to finish was `iexechub/nox-ingestor:0.6.0`; Compose then canceled the other six pulls. A follow-up read-only `docker buildx imagetools inspect iexechub/nox-ingestor:0.6.0` reproduced the actionable network error: `registry-1.docker.io` presented a certificate valid for `gamma-cell-1-lambda.us-east-1.api.aws` rather than Docker Registry, so TLS hostname verification failed. At that time local DNS resolved `registry-1.docker.io` to `3.230.235.129`. The direct path therefore removed the original proxy's 503/truncation failure but exposed a separate local DNS/routing/TLS mismatch.
+
+Compose syntax and the official `linux/arm64` manifests remain validated. The plugin still hides the nested Docker/Compose error as `[object Object]`; the retry left no Nox containers or images, and `offchain-services.log` is empty. The evidence locates the controlled retry's failure in local image acquisition, before any CipherGate assertion, rather than in project Solidity or test logic.
 
 Impact: none of the Docker-backed CipherGate assertions has executed. That includes wallet/contract proof binding, encrypted-attribute ACL negatives, malformed/cross-intent publication proofs, replay checks, repeated evaluation/publication, same-output REVIEW normalization, strict Solidity policy boundaries, and exact/mismatched action gate checks.
 
@@ -76,7 +80,7 @@ Impact: none of the Docker-backed CipherGate assertions has executed. That inclu
 | Unconfigured frontend preview build | PASS |
 | Unconfigured desktop/mobile manual browser QA | PASS |
 | Production frontend build with deployed address | NOT RUN; no CipherGate address |
-| Official Nox Docker E2E | BLOCKED before startup |
+| Official Nox Docker E2E | BLOCKED during offchain stack startup; 0 assertions executed |
 | Invalid/cross-contract/cross-intent proof rejection | IMPLEMENTED; NOT RUN |
 | Same-output normalized REVIEW comparison | IMPLEMENTED; NOT RUN |
 | Exact/mismatched action gate in real Nox flow | IMPLEMENTED; NOT RUN |
@@ -94,7 +98,7 @@ Impact: none of the Docker-backed CipherGate assertions has executed. That inclu
 
 ## Next actions
 
-1. With explicit approval, disable only Docker Desktop's containers proxy, restart Docker, and run `npm run test:nox` against the official stack.
+1. Correct or bypass the local `registry-1.docker.io` DNS/routing/TLS mismatch on a trusted network, verify the registry presents the correct certificate, then rerun `npm run test:nox`; do not repeat the completed proxy-toggle experiment.
 2. Add a persisted screenshot manifest/evidence export and carry the reviewed local commit hash into the demo and submission record.
 3. Only with explicit user approval, deploy CipherGate on Sepolia, configure and test the production browser flow, and collect normalized receipts/screenshots.
 4. Validate the exported advisory JSON through an actual Safe import path without signing or execution; document the nonce/deadline limitation.

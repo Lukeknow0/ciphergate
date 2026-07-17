@@ -179,11 +179,19 @@ Observed startup failure:
 Error: [nox] Failed to start the offchain stack: [object Object]
 ```
 
-Docker Desktop was configured in system proxy mode. Its `httpproxy.log` showed image-pull CONNECT requests routed through the local static HTTPS proxy `http://127.0.0.1:1082`; that path repeatedly returned HTTP 503 and truncated CloudFront layer streams. Three `docker pull nats:2.12-alpine` attempts failed with two `short read ... unexpected EOF` errors and one registry-referrers `Service Unavailable` response.
+During the initial proxy-mode attempts, Docker Desktop used `System proxy` with Containers proxy set to `Same as host proxy`. Its `httpproxy.log` showed image-pull CONNECT requests routed through the local static HTTPS proxy `http://127.0.0.1:1082`; that path repeatedly returned HTTP 503 and truncated CloudFront layer streams. Three `docker pull nats:2.12-alpine` attempts failed with two `short read ... unexpected EOF` errors and one registry-referrers `Service Unavailable` response.
 
-The compose configuration validated, and the official Nox `0.6.0` tags exposed active `linux/arm64` manifests. No containers were created, and `offchain-services.log` remained empty. This rules out invalid compose syntax, missing image tags, and an Apple Silicon architecture mismatch for the observed failure.
+On 2026-07-17, an authorized controlled retry set Containers proxy to `No proxy`, fully restarted Docker Desktop, and verified that the setting survived restart before running `npm run test:nox`. Docker's proxy log recorded seven stack-image connections to `registry-1.docker.io` as `container via direct connection because Docker Desktop has no HTTPS proxy`, confirming that this attempt did not reuse the containers proxy. Compose reported `iexechub/nox-ingestor:0.6.0` first and canceled the other six pulls immediately afterward. The command failed during `Starting Nox offchain stack...`, before any test assertion. No Nox container or image remained, and the plugin-written `offchain-services.log` was 0 bytes.
 
-Conclusion: no Nox E2E assertion ran. Do not label privacy/ACL/proof/replay integration as passing until the official images pull and `npm run test:nox` exits zero.
+Immediately afterward, Containers proxy was restored to `Same as host proxy`, Docker Desktop was fully restarted, and both the restored setting and `Engine running` state were verified. A read-only registry check then reproduced the no-proxy image-acquisition failure exactly:
+
+```text
+ERROR: failed to do request: Head "https://registry-1.docker.io/v2/iexechub/nox-ingestor/manifests/0.6.0": tls: failed to verify certificate: x509: certificate is valid for gamma-cell-1-lambda.us-east-1.api.aws, *.gamma-cell-1-api-lambda.us-east-1.api.aws, not registry-1.docker.io
+```
+
+Local DNS resolved `registry-1.docker.io` to `3.230.235.129` for this check. The compose configuration remains valid, and the official Nox `0.6.0` tags expose active `linux/arm64` manifests. These checks rule out invalid compose syntax, missing image tags, and an Apple Silicon architecture mismatch for the observed failure. The direct path removed the initial local proxy's 503/truncation failure but exposed a separate DNS/routing/TLS certificate mismatch; the plugin hides that nested Docker/Compose detail as `[object Object]`.
+
+Conclusion: no Nox E2E assertion ran. Do not label privacy/ACL/proof/replay integration as passing until the official offchain stack starts and `npm run test:nox` exits zero.
 
 ## E-011 — Dependency lock synchronization
 
