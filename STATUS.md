@@ -1,12 +1,12 @@
 # Project Status
 
 **Decision:** `GO_USER_DIRECTED`
-**Phase:** local integration, security hardening, and evidence packaging
-**Updated:** 2026-07-17 CST
+**Phase:** release-candidate verification and publication packaging
+**Updated:** 2026-07-18 CST
 
 ## Current verdict
 
-CipherGate is deployed to Sepolia with green current non-Docker unit/static/preview-build checks, a passing official Docker-backed Nox E2E, and a passing read-only Sepolia smoke test. It is **not submission-ready**: the production browser flow has not been exercised against the live deployment, the advisory Safe JSON has not been imported through an actual Safe, and no public release exists.
+CipherGate is deployed to Sepolia with a passing official Docker-backed Nox E2E, a production browser PASS flow, a passing read-only Sepolia smoke test, and a successful advisory JSON import through Safe Transaction Builder. The imported transaction was inspected but not turned into a batch, signed, or executed. The technical live-validation and final local test gates are closed; it is **not publicly released or finally submitted** because the live-evidence commit, public repository/CI, demo video, social post, and DoraHacks Submit action remain.
 
 The separate official Hello World journey is complete and independently evidenced on Sepolia. It is not product-deployment evidence.
 
@@ -35,6 +35,9 @@ The separate official Hello World journey is complete and independently evidence
 - Completed manual `ego-browser` QA of the unconfigured preview at desktop (`1561×937`) and mobile (`390×844`) viewports: every action stayed disabled, the configuration warning remained visible, no horizontal overflow was present, all controls stayed within the mobile viewport, and the first- and third-party license links returned their expected text.
 - Passed `npm run test:nox` against the official Docker-backed Nox stack with exit code zero, two green cases, and `2 passing (2 nodejs)`. The run exercised real wallet/contract proof binding, private-attribute ACL negatives, proof retrieval and malformed/cross-intent proof rejection, action/audit/input replay rejection, one-time evaluation/publication, exact/mismatched action gating, and all six strict Solidity comparison boundaries.
 - Deployed `ConfidentialIntentFirewall` to Ethereum Sepolia through Remix/MetaMask. The successful receipt and read-only smoke verification are recorded in E-012.
+- Activated test Safe `0xDE9612a94C5B660a8321CbeAee44a808DA7E6864`; the activation receipt succeeded, deployed bytecode exists, and its live nonce remained `0` during action preparation and import validation.
+- Completed production Intent #0 through three successful CipherGate receipts: submit, encrypted evaluation, and proof-bound publication. The stored decision is `PASS`; the action commitment recomputes from chain, verifier, Safe, target, value, calldata hash, nonce, and deadline.
+- Exported the checksummed Safe Transaction Builder v1 JSON and imported it into the actual Sepolia Safe page. Transaction Builder displayed `1 uploaded`; target, value, and calldata were inspected, while chain/verifier/Safe/nonce/deadline/commitment were independently compared to the persisted JSON and Sepolia state. `Create Batch` was not clicked and no Safe signature or execution occurred.
 - Adapted only the Hardhat shared-RPC test harness by binding each submitter wallet client's `getAddresses()` to its own `account.address`; the helper otherwise returns multiple accounts and can make the handle SDK choose the wrong proof subject. This is test-environment account selection, not a production mock of Nox, proofs, encryption, the contract, or policy evaluation.
 - Acquired and ran the official Nox Docker images. After the successful run, restored Containers proxy to `Same as host proxy`, fully restarted Docker Desktop, and verified in the UI that `Same as host proxy = 1`, `Manual = 0`, and `No proxy = 0`. The engine was running, `docker version` returned normal server details, and no Nox/temporary containers remained.
 - Added an MIT license, third-party notices, pinned GitHub Actions definitions, `.nvmrc`, `.env.example`, and Sepolia deploy/read-only-smoke helpers.
@@ -52,22 +55,22 @@ Historical troubleshooting: initial runs with Docker Desktop proxy set to `Syste
 
 The official images were subsequently acquired and the full stack ran successfully using a temporary Containers proxy `Manual` setting. Immediately afterward, Containers proxy was restored to `Same as host proxy` and Docker Desktop was fully restarted. Final UI verification showed exactly one selected mode (`Same as host proxy = 1`, `Manual = 0`, `No proxy = 0`), `Engine running`; `docker version` returned normal server information, and no containers remained. The earlier acquisition failures are retained as troubleshooting history and are not a current blocker.
 
-## Open blockers
+## Live validation closure and open blockers
 
-### B-002 — Live product and Safe validation are incomplete
+### R-002 — Live product and Safe import validation complete
 
-- CipherGate is deployed at `0xe0df8484d6986e1ef9b4ef04a263d72708560b71`; the production browser flow has not yet been exercised against it.
-- The browser implementation has not been tested against a deployed CipherGate address; only its unit tests and explicit unconfigured preview build have passed.
-- The production build intentionally requires a non-zero `CIPHERGATE_CONTRACT_ADDRESS`.
-- The Transaction Builder JSON has not been imported into an actual Safe. Its expected nonce and deadline appear in commitment/description metadata, but the JSON format itself cannot enforce them at execution.
+- CipherGate is deployed at `0xe0df8484d6986e1ef9b4ef04a263d72708560b71`; production Intent #0 completed submit/evaluate/publish with successful receipts and a proof-published on-chain `PASS`.
+- The production build used that address and the authorized Sepolia account. The exact action bound Safe `0xDE9612a94C5B660a8321CbeAee44a808DA7E6864`, target `0x309BD0006389C29C6b691d6d12Df83DafeC85316`, zero value, empty calldata, nonce `0`, and deadline `1784562256` to commitment `0xd661e3083474af643505b50218f21aa716f35abfea9814f85b2435bbe3c34bef`.
+- Safe Transaction Builder accepted the exported JSON and displayed `1 uploaded`. The persisted JSON checksum recomputes exactly; its full public-field comparison is in `evidence/LIVE_FIELD_CHECK.md`.
+- The expected nonce and deadline remain commitment/description metadata; the JSON format cannot enforce them at execution.
 - Replay protection is submitter-scoped to avoid mempool-copy denial of service; v1 does not require a Safe-owner signature or prevent different accounts from creating separate intents for the same action. The exported description identifies the verifier, intent ID, and submitter for review.
-- No Safe Guard or Module consumes the commitment. Signing and execution remain outside CipherGate.
+- No Safe Guard or Module consumes the commitment. `Create Batch` was not clicked; signing and execution were not performed and remain outside CipherGate.
 
 ### B-003 — Source/release and submission packaging are incomplete
 
-- A reviewed local source commit exists, but there is no release tag, public remote, or CI run.
-- `scripts/deploy-sepolia.mjs` and `scripts/smoke-sepolia.mjs` exist but have not been run; the deploy helper would require explicit wallet authorization.
-- There is no automated live-chain browser test, persisted screenshot manifest, evidence-export script, demo recording, public repository URL, or release artifact.
+- A reviewed local source commit exists, but the live-evidence update still needs its final local commit; there is no release tag, public remote, or CI run.
+- Deployment was performed through Remix/MetaMask rather than `scripts/deploy-sepolia.mjs`. The read-only `scripts/smoke-sepolia.mjs` has run successfully against the live address.
+- The live browser flow was manually verified and a persisted screenshot manifest exists. There is still no automated live-chain browser test, evidence-export script, demo recording, public repository URL, or release artifact.
 - The current online npm audit reports 16 development/transitive findings (`0` critical, `2` high, `6` moderate, `8` low). They flow through the pinned Nox/Hardhat toolchain and have no compatible direct-dependency fix; no blanket `npm audit fix` was run because it could break the required integration stack.
 
 ## Verification matrix
@@ -94,17 +97,17 @@ The official images were subsequently acquired and the full stack ran successful
 | Lockfile `resolved` + `integrity` coverage | PASS (202/202 dependency entries) |
 | Official npm-registry isolated `npm ci` + aggregate check for exact current revision | PASS |
 | Online dependency audit | REVIEW (16: 0 critical / 2 high / 6 moderate / 8 low; no compatible direct fix) |
-| Live-chain browser flow | NOT RUN |
-| Actual Safe import/API validation | NOT RUN |
+| Live-chain browser flow | PASS: Intent #0 submit/evaluate/publish, proof-published `PASS` |
+| Actual Safe import validation | PASS: `1 uploaded`, exact field comparison; no signature/execution |
 | CipherGate Sepolia deployment and smoke test | PASS |
 | Local Git repository | PASS |
 | Reviewed source commit / clean tree at creation | PASS locally |
 | License / notices / CI definition | CREATED locally; CI NOT RUN |
-| Release tag / screenshot manifest / demo | NOT CREATED |
+| Screenshot manifest | CREATED and hash-indexed |
+| Release tag / demo | NOT CREATED |
 
 ## Next actions
 
-1. Add a persisted screenshot manifest/evidence export and carry the reviewed local commit hash and passing official Nox output into the demo and submission record.
-2. Only with explicit user approval, deploy CipherGate on Sepolia, configure and test the production browser flow, and collect normalized receipts/screenshots.
-3. Validate the exported advisory JSON through an actual Safe import path without signing or execution; document the nonce/deadline limitation.
-4. Only with explicit user approval, publish the repository, video, social post, and final DoraHacks submission.
+1. Review the final diff and secret/PII scan, then create a new local commit for the live evidence package.
+2. Record and verify the maximum-four-minute demo using the persisted live receipts/screenshots; do not sign or execute the imported Safe action.
+3. Only with explicit user approval, publish the repository, run public CI, upload the video, publish the social post, and perform the final DoraHacks Submit action.

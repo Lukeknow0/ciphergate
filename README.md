@@ -2,7 +2,7 @@
 
 CipherGate is a pre-execution policy layer for treasury intents. It uses iExec Nox encrypted values to evaluate an amount, risk score, and counterparty flags before an exact, precommitted Safe action may be exported for human review.
 
-> **Current status (2026-07-17): security-hardened CipherGate Sepolia deployment with the official Docker-backed Nox E2E passing; not submission-ready.** CipherGate is deployed at `0xe0df8484d6986e1ef9b4ef04a263d72708560b71` and the read-only Sepolia smoke test passes. The production browser flow, actual Safe import, and public release remain pending. The separate official Nox Hello World deployment and encrypted deposit smoke test are live on Sepolia.
+> **Current status (2026-07-18): live Sepolia release candidate with the official Docker-backed Nox E2E, production PASS flow, and actual Safe Transaction Builder import verified.** CipherGate is deployed at `0xe0df8484d6986e1ef9b4ef04a263d72708560b71`. Intent #0 reached proof-published `PASS`, its exact checksummed batch imported successfully into Safe Transaction Builder, and no Safe proposal was signed or executed. Public release, CI, demo video, social post, and final hackathon submission remain pending. The separate official Nox Hello World deployment remains onboarding evidence only.
 
 ## What exists today
 
@@ -12,7 +12,7 @@ CipherGate is a pre-execution policy layer for treasury intents. It uses iExec N
 - Submission rejects a reused action commitment or audit ID for the same submitter, and rejects an exact encrypted-input bundle replay. Action-commitment uniqueness is deliberately submitter-scoped so another address cannot copy a pending commitment and consume a global marker. Evaluation and publication are each one-time operations, and private-attribute access is fixed to the owner and submission-time auditor.
 - `test/nox-e2e.test.ts` passes against the official Docker-backed Nox stack. Its two cases exercise real wallet/contract proof binding, private-attribute ACL negatives, proof retrieval and malformed/cross-intent proof rejection, action/audit/input replay rejection, one-time evaluation/publication, exact/mismatched action gating, and six strict Solidity comparison boundaries.
 - The Hardhat shared RPC helper exposes multiple accounts from `getAddresses()`. In the E2E harness, each submitter wallet client's `getAddresses()` is therefore bound to that client's `account.address`, ensuring the Nox handle proof is made for the intended submitter. This is a test-environment wallet adapter, not a production mock of Nox or CipherGate.
-- `frontend/` uses the official Nox handle client and viem for wallet connection, three handle/proof requests, submission, encrypted evaluation, public-decision proof retrieval/publication, and PASS-only Safe batch export. The unconfigured preview build is tested; a production build requires a non-zero deployed CipherGate address.
+- `frontend/` uses the official Nox handle client and viem for wallet connection, three handle/proof requests, submission, encrypted evaluation, public-decision proof retrieval/publication, and PASS-only Safe batch export. Both the fail-closed unconfigured preview and a production build configured with the live CipherGate address have been exercised; the live production flow reached PASS and exported the imported batch recorded in E-015/E-016.
 - `frontend/src/safeProposal.js` verifies deployed Safe code and the exact live `nonce()`, recomputes the action commitment before export, and emits the checksummed Safe Transaction Builder v1 shape. The JSON is advisory: it does not enforce execution and is not a Safe Guard or Module.
 - The canonical `ConfidentialPiggyBank` tutorial contract is deployed on Sepolia at [`0x372Be2…B2EC0`](https://sepolia.etherscan.io/address/0x372Be24349fC9162fa45b85c84027059789B2EC0). A bytecode-identical duplicate at [`0xfd574b…dae4`](https://sepolia.etherscan.io/address/0xfd574bd565eda11ced8e92b0981806857e12dae4) is recorded only as deployment history and is not used by development or submission materials. This is onboarding evidence, not the CipherGate product deployment.
 
@@ -44,7 +44,7 @@ The Solidity evaluator keeps the attributes private and marks only the normalize
 ```text
 contracts/   CipherGate contract and the separate Hello World compatibility copy
 frontend/    Browser Nox/contract flow and advisory PASS-only Safe batch exporter
-scripts/     Build, policy/ABI/doc checks, and unexecuted Sepolia deploy/smoke helpers
+scripts/     Build, policy/ABI/doc checks, plus Sepolia deploy and read-only smoke helpers
 test/        Hardhat ACL, Nox E2E, policy-vector, frontend, and Safe-adapter tests
 docs/        Threat model
 ```
@@ -71,11 +71,11 @@ npm run build:frontend:preview
 npm run test:nox
 ```
 
-`npm run build:frontend` is the release build and intentionally fails until `CIPHERGATE_CONTRACT_ADDRESS` is a non-zero deployed address. `npm run test:nox` starts the official Nox Docker stack and performs the real encryption/decryption, ACL, proof, replay, publication, boundary, and exact-action tests; it is intentionally separate from the fast checks. The current run exits zero with two checkmarks and `2 passing (2 nodejs)`.
+`npm run build:frontend` is the release build and requires `CIPHERGATE_CONTRACT_ADDRESS` to be a non-zero deployed address. `npm run test:nox` starts the official Nox Docker stack and performs the real encryption/decryption, ACL, proof, replay, publication, boundary, and exact-action tests; it is intentionally separate from the fast checks. The recorded run exits zero with two checkmarks and `2 passing (2 nodejs)`.
 
 ### Verification snapshot
 
-| Check | Result on 2026-07-17 | Evidence |
+| Check | Result through 2026-07-18 | Evidence |
 |---|---|---|
 | Solidity compile (`0.8.35`, optimizer, `viaIR`) | PASS | [E-008](EVIDENCE.md#e-008--ciphergate-compile-and-pinned-toolchain) |
 | Contract access/metadata/commitment unit tests | PASS, 4/4 | [E-009](EVIDENCE.md#e-009--local-non-docker-test-snapshot) |
@@ -91,6 +91,8 @@ npm run test:nox
 | Official npm-registry isolated `npm ci` + aggregate check for this exact revision | PASS | [E-011](EVIDENCE.md#e-011--dependency-lock-synchronization) |
 | Online `npm audit` | REVIEW: 16 development/transitive findings (0 critical, 2 high, 6 moderate, 8 low); no compatible direct fix through the pinned Nox/Hardhat path, so no blanket fix was applied | [E-011](EVIDENCE.md#e-011--dependency-lock-synchronization) |
 | CipherGate Sepolia deployment | PASS | [E-012](EVIDENCE.md#e-012--ciphergate-live-deployment) |
+| Production Sepolia PASS flow | PASS; submit/evaluate/publish receipts successful, Intent #0 = `PASS` | [E-015](EVIDENCE.md#e-015--live-sepolia-pass-flow) |
+| Safe Transaction Builder import | PASS; `1 uploaded`, exact fields compared; no signature/execution | [E-016](EVIDENCE.md#e-016--safe-transaction-builder-import) |
 | Local Git repository / reviewed source commit | PASS locally; no remote or release tag | [E-013](EVIDENCE.md#e-013--source-control-and-release-evidence) |
 
 ## Live onboarding evidence
@@ -99,7 +101,7 @@ npm run test:nox
 - Official Hello World deployment: [`0x3c1089…5840`](https://sepolia.etherscan.io/tx/0x3c10890fbb8c0d01ad8cf7f9227509f4c41421042ab44519267cfcad149d5840)
 - Nox encrypted deposit: [`0x3592f3…b138`](https://sepolia.etherscan.io/tx/0x3592f3f94a6d930edd5632019f750c0e70f8411687ce03cc9753a5ccaff3b138)
 
-The encrypted deposit receipt has `status: 0x1` and targets the canonical `0x372Be2…B2EC0` contract. The wallet's current Sepolia nonce is `3`; the red MetaMask “failed” item was local activity history rather than an additional failed on-chain transaction. These transactions prove the official Hello World journey. They do **not** prove that CipherGate itself is deployed or end-to-end validated.
+The encrypted deposit receipt has `status: 0x1` and targets the canonical `0x372Be2…B2EC0` contract. After the three onboarding transactions the wallet nonce was `3`; later CipherGate and Safe transactions naturally advanced it. The red MetaMask “failed” item was local activity history rather than an additional failed on-chain transaction. These onboarding transactions do **not** substitute for the separate CipherGate deployment and live-flow receipts in E-012/E-015.
 
 ## Submission documents
 
@@ -114,4 +116,4 @@ The encrypted deposit receipt has `status: 0x1` and targets the canonical `0x372
 - [iExec Nox feedback](feedback.md)
 - [Registration status](REGISTRATION_STATUS.md)
 
-No public repository, CI run, video, social post, Safe import/signature/execution, or final hackathon submission has been performed. A reviewed initial commit exists in the local `main` repository; it has not been tagged or published.
+No public repository, CI run, video, social post, Safe signature/execution, or final hackathon submission has been performed. The Safe JSON import was validation-only. Reviewed local commits exist on `main`; they have not been tagged or published.

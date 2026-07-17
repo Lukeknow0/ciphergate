@@ -1,0 +1,22 @@
+{
+  "version": "1.0",
+  "chainId": "11155111",
+  "createdAt": 1784305258946,
+  "meta": {
+    "name": "CipherGate PASS proposal",
+    "description": "Commitment-bound CipherGate advisory (not a Guard/Module); verifier=0xe0Df8484d6986e1eF9b4Ef04A263D72708560B71; intent=0; submitter=0x309BD0006389C29C6b691d6d12Df83DafeC85316; commitment=0xd661e3083474af643505b50218f21aa716f35abfea9814f85b2435bbe3c34bef; audit=0x17d5c4dc32bc42781db5379ee7bab7f4a067f8c40f2afa952fda24d61fb62a7d; policy=0xd9b7aa2496e739c17db5c0c551eeb5089cb8ec567dcb61f6e5290ea0ddf05802; safeNonce=0 (commitment metadata only; verify manually on Safe import); deadline=1784562256",
+    "txBuilderVersion": "2.0.1",
+    "createdFromSafeAddress": "0xDE9612a94C5B660a8321CbeAee44a808DA7E6864",
+    "createdFromOwnerAddress": "",
+    "checksum": "0xd99244cb7f90c95190a1fcde69a12b17f991998578f9c7de793e36ab6d69ebdb"
+  },
+  "transactions": [
+    {
+      "to": "0x309BD0006389C29C6b691d6d12Df83DafeC85316",
+      "value": "0",
+      "data": "0x",
+      "contractMethod": null,
+      "contractInputsValues": null
+    }
+  ]
+}

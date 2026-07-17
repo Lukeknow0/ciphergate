@@ -245,7 +245,7 @@ An online `npm audit` for the current dependency graph reports 16 findings: 0 cr
 - Contract address: `0xe0df8484d6986e1ef9b4ef04a263d72708560b71`
 - Deployment transaction: `0x515098f6f1894202bf895c4f3af909b5493d4733611ec06c0fcdd0db2e15d078`
 - Explorer: https://sepolia.etherscan.io/tx/0x515098f6f1894202bf895c4f3af909b5493d4733611ec06c0fcdd0db2e15d078
-- Block: `11292005`; receipt status: `0x1`; `to: null`
+- Block: `11292069` (`0xac4da5`); receipt status: `0x1`; `to: null`
 - Runtime bytecode: non-empty; smoke hash: `0xf1c4febb28e9a7f005693b00d56364fc4a96a124a666756512a698ebba1218fb`
 - `owner()` and `auditor()` both return the authorized wallet.
 - `policyVersion()` returns `1`.
@@ -260,7 +260,7 @@ CIPHERGATE_CONTRACT_ADDRESS=0xe0df8484d6986e1ef9b4ef04a263d72708560b71 \
 npm run smoke:sepolia
 ```
 
-The smoke command exited zero on 2026-07-17 CST. This evidence covers deployment and public metadata only; the live browser intent flow and Safe import remain pending.
+The smoke command exited zero on 2026-07-17 CST. On 2026-07-18, two independent public RPC endpoints also returned block `0xac4da5`, status `0x1`, and the same created contract address for the deployment receipt. The earlier draft block value `11292005` was incorrect and is superseded by `11292069`. This entry covers deployment and public metadata; the production PASS flow and Safe import are independently recorded in E-015 and E-016.
 
 ## E-013 — Source control and release evidence
 
@@ -273,16 +273,16 @@ The evidence package still cannot cite:
 - a public repository URL or CI run associated with the reviewed source.
 - a release tag or published release artifact.
 
-An MIT `LICENSE`, `THIRD_PARTY_NOTICES.md`, aggregate `npm run check`, pinned two-job GitHub Actions workflow, and deploy/read-only-smoke helpers exist locally. No CI run can exist before publication. Evidence-export, screenshot-manifest, and demo assets are absent; deploy/smoke scripts are unexecuted.
+An MIT `LICENSE`, `THIRD_PARTY_NOTICES.md`, aggregate `npm run check`, pinned two-job GitHub Actions workflow, and deploy/read-only-smoke helpers exist locally. No CI run can exist before publication. A hash-indexed screenshot manifest and live-field check now exist under [`evidence/`](evidence/); the manual deployment used Remix/MetaMask, and the read-only smoke script has run successfully. An automated evidence-export script and demo assets remain absent.
 
 Required closure evidence:
 
-1. Add a screenshot manifest and repeatable evidence export before recording the demo.
+1. Finish the final local validation and commit the live evidence package before recording the demo.
 2. Run CI after publication and cite the release commit/tag in the demo, deployment record, and final submission.
 
 ## E-014 — Proof-bound decision and browser integration
 
-**Status:** LOCAL OFFICIAL NOX E2E, BUILD, AND UNIT/STATIC CHECKS VERIFIED; LIVE CIPHERGATE SEPOLIA/BROWSER FLOW PENDING
+**Status:** LOCAL OFFICIAL NOX E2E, BUILD, AND UNIT/STATIC CHECKS VERIFIED; LIVE FLOW AND SAFE IMPORT VERIFIED IN E-015/E-016
 
 At 2026-07-17 CST, the local security design, official-stack integration, and browser adapter have these verified properties:
 
@@ -295,9 +295,9 @@ At 2026-07-17 CST, the local security design, official-stack integration, and br
 - The public-surface test asserts the proof-only ABI, fixed policy, action-bound gate, required Nox proof calls, and absence of sensitive event field names.
 - The fresh Docker-backed E2E in E-010 executed both test cases on the official Nox stack and exited zero, covering wallet/contract proof binding, private-attribute ACL negatives, malformed/cross-intent/replay rejection, one-time evaluation/publication, proof-bound public decisions, six strict Solidity boundaries, and exact/mismatched action gating.
 
-The browser implementation uses `@iexec-nox/handle` plus viem to connect on Sepolia, verify deployed Safe code and its live nonce, commit the exact Safe action, obtain three handle/proof pairs, submit an intent, evaluate it, fetch/relay the public-decryption proof, and export a PASS-only checksummed Safe Transaction Builder batch. It generates opaque audit IDs, clears sensitive inputs after confirmation, and recomputes the commitment immediately before export. Session/epoch checks and pinned-block reads prevent stale asynchronous work from overwriting newer wallet/chain state. The preview build intentionally remains unconfigured until a CipherGate deployment address is supplied.
+The browser implementation uses `@iexec-nox/handle` plus viem to connect on Sepolia, verify deployed Safe code and its live nonce, commit the exact Safe action, obtain three handle/proof pairs, submit an intent, evaluate it, fetch/relay the public-decryption proof, and export a PASS-only checksummed Safe Transaction Builder batch. It generates opaque audit IDs, clears sensitive inputs after confirmation, and recomputes the commitment immediately before export. Session/epoch checks and pinned-block reads prevent stale asynchronous work from overwriting newer wallet/chain state. The fail-closed preview remains available for unconfigured QA; the production build was configured with the E-012 address for the E-015 flow.
 
-Manual `ego-browser` QA of that unconfigured build passed at desktop (`1561×937`) and mobile (`390×844`) viewports. All six transaction-affecting buttons were disabled, the unconfigured-build warning was visible, the page had no horizontal overflow, every input/button remained inside the mobile viewport, and the footer served the MIT license plus the generated third-party license file. The generated notice contained 14 package sections. This verifies the local fail-closed preview and responsive layout only; it does not validate a wallet connection, live CipherGate flow, or Safe import.
+Manual `ego-browser` QA of the unconfigured build passed at desktop (`1561×937`) and mobile (`390×844`) viewports. All six transaction-affecting buttons were disabled, the unconfigured-build warning was visible, the page had no horizontal overflow, every input/button remained inside the mobile viewport, and the footer served the MIT license plus the generated third-party license file. The generated notice contained 14 package sections. This verifies the fail-closed preview and responsive layout; separate production wallet/live-chain behavior is evidenced in E-015/E-016.
 
 Verified commands:
 
@@ -313,4 +313,64 @@ npm run test:nox        PASS (2 passing (2 nodejs), fresh exit 0)
 ego-browser desktop/mobile unconfigured QA  PASS
 ```
 
-The Safe adapter follows the official v1 batch fields and an independently expressed checksum implementation tested against a fixed Safe Transaction Builder `2.0.1` oracle value. The JSON description records the verifier, intent ID, on-chain submitter, commitment, policy/audit metadata, expected nonce, and deadline. This artifact remains advisory: Transaction Builder JSON does not itself enforce the expected nonce/deadline, and only a future Guard/Module consuming the same commitment could enforce the decision at execution. Actual Safe import remains required before calling the integration end-to-end validated.
+The Safe adapter follows the official v1 batch fields and an independently expressed checksum implementation tested against a fixed Safe Transaction Builder `2.0.1` oracle value. The JSON description records the verifier, intent ID, on-chain submitter, commitment, policy/audit metadata, expected nonce, and deadline. This artifact remains advisory: Transaction Builder JSON does not itself enforce the expected nonce/deadline, and only a future Guard/Module consuming the same commitment could enforce the decision at execution. The actual validation-only import is recorded in E-016; it is not Safe execution enforcement.
+
+## E-015 — Live Sepolia PASS flow
+
+**Status:** VERIFIED — SUBMIT, EVALUATE, AND PROOF-BOUND PUBLISH RECEIPTS SUCCEEDED
+
+On 2026-07-18 CST, the production frontend was configured with CipherGate `0xe0df8484d6986e1ef9b4ef04a263d72708560b71`, connected on Ethereum Sepolia as the authorized wallet, and prepared Intent #0 for activated Safe `0xDE9612a94C5B660a8321CbeAee44a808DA7E6864`.
+
+Successful product transactions:
+
+| Step | Transaction | Block | Receipt |
+|---|---|---:|---|
+| Submit Intent #0 | [`0xf40e087b798a53aa48d686faa074db648f3374d9876a1e67976a6b11f5c605bd`](https://sepolia.etherscan.io/tx/0xf40e087b798a53aa48d686faa074db648f3374d9876a1e67976a6b11f5c605bd) | `11292743` | `status = 1` |
+| Evaluate encrypted policy | [`0xe3f6406b36d44ed33105a913e2d49e54fec7a4ed22935972693d5833e6771e50`](https://sepolia.etherscan.io/tx/0xe3f6406b36d44ed33105a913e2d49e54fec7a4ed22935972693d5833e6771e50) | `11292768` | `status = 1` |
+| Publish normalized decision | [`0x5d1a812da0a4258b31e912549754581fa46f09b9f766e02d5d3973299ea19dfd`](https://sepolia.etherscan.io/tx/0x5d1a812da0a4258b31e912549754581fa46f09b9f766e02d5d3973299ea19dfd) | `11292896` | `status = 1` |
+
+Fresh transaction-input decoding confirms `submitIntent`, `evaluateEncryptedPolicy(0)`, and `publishDecision(0, proof)`. The public proof bytes hash to `0x1d1ad21979370e94d6862b363901f0c3073464396ebee725fbda0f33e6ba3fd8`. Intent #0 stores `publicDecision = 1` (`PASS`), policy v1/hash, action deadline `1784562256`, and action commitment `0xd661e3083474af643505b50218f21aa716f35abfea9814f85b2435bbe3c34bef`.
+
+The commitment was independently recomputed from:
+
+- chain `11155111`;
+- verifier `0xe0Df8484d6986e1eF9b4Ef04A263D72708560B71`;
+- Safe `0xDE9612a94C5B660a8321CbeAee44a808DA7E6864`;
+- target `0x309BD0006389C29C6b691d6d12Df83DafeC85316`;
+- value `0`;
+- calldata `0x`, hash `0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470`;
+- expected Safe nonce `0`;
+- deadline `1784562256`.
+
+The recomputation equals the stored commitment, Safe bytecode is non-empty, live Safe nonce was `0`, and `safeProposalAllowed(0, commitment)` returned `true` at the 2026-07-18 01:14 CST check. Detailed field results are persisted in [`evidence/LIVE_FIELD_CHECK.md`](evidence/LIVE_FIELD_CHECK.md). The production screenshot is indexed in [`evidence/SCREENSHOT_MANIFEST.md`](evidence/SCREENSHOT_MANIFEST.md).
+
+## E-016 — Safe Transaction Builder import
+
+**Status:** VERIFIED — JSON IMPORTED AND FIELDS INSPECTED; NOT SIGNED OR EXECUTED
+
+Safe activation transaction [`0x29bd36f8f6329fd88376aef133eaaa91721b37aa0f3d436e43bdc3871e91f4af`](https://sepolia.etherscan.io/tx/0x29bd36f8f6329fd88376aef133eaaa91721b37aa0f3d436e43bdc3871e91f4af) succeeded in block `11292710`. Deployed bytecode exists at Safe `0xDE9612a94C5B660a8321CbeAee44a808DA7E6864`.
+
+The exported [`ciphergate-safe-intent-0.json`](evidence/safe-import/ciphergate-safe-intent-0.json) has file SHA-256 `e45a2d332d45b252dae4cc640a79e89c2b749e6ce89a23d0ecb81d4bc84c9315`. Its stored Safe Transaction Builder checksum `0xd99244cb7f90c95190a1fcde69a12b17f991998578f9c7de793e36ab6d69ebdb` recomputes exactly.
+
+The JSON imported into the actual Safe Transaction Builder page, which displayed `1 uploaded`. The imported edit dialog was inspected for destination, zero ETH value, and empty calldata; the full chain/Safe/verifier/target/value/calldata-hash/nonce/deadline/commitment comparison is recorded in [`evidence/LIVE_FIELD_CHECK.md`](evidence/LIVE_FIELD_CHECK.md). Screenshots and their hashes are recorded in [`evidence/SCREENSHOT_MANIFEST.md`](evidence/SCREENSHOT_MANIFEST.md).
+
+`Create Batch` was not clicked. The Safe app was wallet-disconnected, and no Safe proposal was signed, sent for execution, or executed. The import proves format acceptance and field fidelity only; it does not turn the advisory expected nonce/deadline metadata into execution-time enforcement.
+
+## E-017 — Final local release-candidate verification
+
+**Status:** VERIFIED — FRESH FINAL MATRIX EXITED ZERO
+
+On 2026-07-18 CST, after adding the live-flow/Safe evidence and correcting the deployment block record, the release-candidate working tree was verified with:
+
+| Check | Result |
+|---|---|
+| `npm run check` | PASS, exit `0`: compile; contract 4/4; frontend 9/9; Safe 9/9; policy 5/5; surface; docs; preview build |
+| `npm run test:nox` | PASS, exit `0`: two `✔` cases; `2 passing (2 nodejs)` |
+| production `npm run build:frontend` with the E-012 address | PASS, exit `0` |
+| `npm run smoke:sepolia` | PASS, exit `0`; chain/address/bytecode/owner/auditor/policy/lifetime matched |
+| `npm run test:docs` | PASS, exit `0` |
+| isolated official-registry `npm ci` + `npm run check` | PASS, exit `0` for the final candidate files |
+| `git diff --check` | PASS, exit `0` |
+| secret/PII, address/hash/link, evidence checksum, and residual-container scans | PASS: no email addresses or secret values found; only public blockchain addresses and documented placeholder/warning prose remain |
+
+No `npm audit fix` was run. No Docker proxy setting was changed. The official Nox run cleaned up its temporary stack, and the residual-container check found no Nox containers.

@@ -1,7 +1,7 @@
 # CipherGate threat model (P0)
 
-**Updated:** 2026-07-17 11:00 CST
-**Applies to:** the current local prototype, not a production deployment
+**Updated:** 2026-07-18 CST
+**Applies to:** the current Sepolia release candidate; not an audited production system
 
 ## Assets and security goals
 
@@ -72,14 +72,14 @@ Consequences and limits:
 - Handle/proof sizes, timing, gas, transaction ordering, repeated submissions, and wallet relationships may leak metadata even when values remain encrypted.
 - A compromised privileged wallet can read protected attributes and trigger evaluation, but cannot select the published enum without a matching Nox proof.
 - A compromised Handle Gateway, TLS endpoint, browser, or upstream service path can observe or alter inputs before handle creation; the current design is not client-side-only encryption.
-- A front end can misrepresent cleartext before encryption or proposal fields after evaluation; users must verify wallet prompts and Safe payloads. The current build derives its badge from the public Nox result, but has not yet been exercised against a deployed CipherGate contract.
+- A front end can misrepresent cleartext before encryption or proposal fields after evaluation; users must verify wallet prompts and Safe payloads. The current production build derives its badge from the public Nox result and completed one live Sepolia PASS path, but that manual run is not a general front-end integrity proof or automated live regression test.
 - The encrypted `amount` is a submitter-provided policy attribute. Nox proves which encrypted value was evaluated, but v1 has no oracle/attestation proving that value equals the committed Safe native-value field. The adapter supplies both consistently; a malicious custom client can lie.
 - Action-commitment replay protection is submitter-scoped to prevent mempool-copy denial of service. Different accounts can therefore create separate, potentially conflicting intents for the same Safe action. v1 has no Safe-owner signature/allowlist; reviewers must use the verifier, intent ID, and on-chain submitter recorded in the JSON description and contract state.
 - The Transaction Builder JSON is an advisory interoperability artifact, not an enforcement hook. Its format does not carry the expected Safe nonce as an executable constraint; CipherGate records it in the commitment/description, but only a Safe Guard/Module consuming the commitment could enforce it at execution time.
 - An exported JSON file can be copied. The browser re-checks the live nonce and deadline before each export, but cannot control a file after download. Safe owners must verify the expected nonce/deadline and exact transaction before signing.
 - A proof-verified PASS can be queried until its deadline for the same commitment. CipherGate does not mark a commitment consumed because it does not observe Safe execution.
-- The proposal JSON has not yet been validated through an actual Safe import/API path; no claim of end-to-end Safe enforcement is made.
-- The local official Nox integration now passes with two cases and `2 passing (2 nodejs)`, evidencing the covered proof, ACL, replay, publication, strict-boundary, and action-gate behavior. CipherGate is still not deployed to Sepolia, and neither the production browser flow nor an actual Safe JSON import has been validated. The separate Hello World Sepolia address is onboarding evidence, not a CipherGate deployment.
+- The proposal JSON imported successfully through the actual Safe Transaction Builder UI, but import acceptance is not Safe enforcement. `Create Batch` was not clicked, and no Safe signature or execution occurred.
+- The local official Nox integration passes with two cases and `2 passing (2 nodejs)`, evidencing the covered proof, ACL, replay, publication, strict-boundary, and action-gate behavior. CipherGate is separately deployed at `0xe0df8484d6986e1ef9b4ef04a263d72708560b71`; one production PASS flow and one Safe import were validated. The separate Hello World Sepolia address remains onboarding evidence, not the CipherGate product.
 - Dependencies are version-pinned, the installed tree matches the synchronized lockfile, and all 202/202 dependency entries contain official-registry `resolved` URLs plus `integrity` digests. The exact current revision passed an isolated official-registry `npm ci` plus `npm run check`. The online audit still reports 16 development/transitive findings (0 critical, 2 high, 6 moderate, 8 low) through the pinned Nox/Hardhat path; no compatible direct fix exists and no blanket fix was applied.
 
 ## Out of scope
