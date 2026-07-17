@@ -264,9 +264,9 @@ The smoke command exited zero on 2026-07-17 CST. On 2026-07-18, two independent 
 
 ## E-013 — Source control and release evidence
 
-**Status:** REVIEWED INITIAL LOCAL COMMIT CREATED; NO PUBLIC RELEASE
+**Status:** REVIEWED SOURCE AND LIVE-EVIDENCE COMMITS CREATED; NO PUBLIC RELEASE
 
-`git rev-parse --show-toplevel` resolves to the dedicated CipherGate directory, and the branch is `main`. This evidence file is part of the reviewed initial commit created after the aggregate test, exact-revision isolated `npm ci` reproduction, browser QA, security review, diff validation, and secret scan. At that commit's creation, `git status --short` was empty; `git rev-parse HEAD` is the authoritative local identifier.
+`git rev-parse --show-toplevel` resolves to the dedicated CipherGate directory, and the branch is `main`. The reviewed source baseline was created after the aggregate test, exact-revision isolated `npm ci` reproduction, browser QA, security review, diff validation, and secret scan. The live PASS/Safe import evidence and final verification record are also committed locally; `git rev-parse HEAD` is the authoritative current local identifier.
 
 The evidence package still cannot cite:
 
@@ -277,7 +277,7 @@ An MIT `LICENSE`, `THIRD_PARTY_NOTICES.md`, aggregate `npm run check`, pinned tw
 
 Required closure evidence:
 
-1. Finish the final local validation and commit the live evidence package before recording the demo.
+1. Record and verify the maximum-four-minute demo from the committed evidence package.
 2. Run CI after publication and cite the release commit/tag in the demo, deployment record, and final submission.
 
 ## E-014 — Proof-bound decision and browser integration

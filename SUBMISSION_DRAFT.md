@@ -56,7 +56,7 @@ CipherGate separates confidential evaluation from signing and execution:
 - MIT license, provenance/third-party notices, pinned CI definition, `.nvmrc`, `.env.example`, and Sepolia deploy/read-only-smoke helpers; the read-only smoke helper has run against the live address.
 - Live Sepolia Intent #0 completed submit, encrypted evaluation, and proof-bound publication with successful receipts and an on-chain `PASS`.
 - The exact checksummed batch imported through Safe Transaction Builder as `1 uploaded`; fields were inspected without creating a batch, signing, or execution.
-- Reviewed initial commit created in the local `main` repository; no public remote or release tag yet.
+- Reviewed source and live-evidence commits created in the local `main` repository; no public remote or release tag yet.
 
 ## Verified evidence as of 2026-07-18
 
@@ -92,7 +92,7 @@ The canonical Hello World address is `0x372Be24349fC9162fa45b85c84027059789B2EC0
 - The unconfigured frontend preview passed desktop/mobile browser QA, and the production browser completed the live PASS/export path. Responsive production QA across multiple viewports was not repeated.
 - The exact current revision passed an isolated official-registry `npm ci` plus the complete aggregate check.
 - The current online dependency audit still reports 16 development/transitive findings (0 critical, 2 high, 6 moderate, 8 low). They flow through the pinned Nox/Hardhat path and have no compatible direct fix; no blanket audit fix was applied because it could break the required integration stack.
-- CipherGate is deployed to Sepolia, but the source is not tagged or published; only a reviewed local source commit exists.
+- CipherGate is deployed to Sepolia, but the source is not tagged or published; reviewed commits exist only in the local repository.
 - The successful Hello World Sepolia contract and deposit are onboarding evidence only; that address is not CipherGate.
 
 ## Required before submission

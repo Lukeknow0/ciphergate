@@ -6,7 +6,7 @@
 
 ## Current verdict
 
-CipherGate is deployed to Sepolia with a passing official Docker-backed Nox E2E, a production browser PASS flow, a passing read-only Sepolia smoke test, and a successful advisory JSON import through Safe Transaction Builder. The imported transaction was inspected but not turned into a batch, signed, or executed. The technical live-validation and final local test gates are closed; it is **not publicly released or finally submitted** because the live-evidence commit, public repository/CI, demo video, social post, and DoraHacks Submit action remain.
+CipherGate is deployed to Sepolia with a passing official Docker-backed Nox E2E, a production browser PASS flow, a passing read-only Sepolia smoke test, and a successful advisory JSON import through Safe Transaction Builder. The imported transaction was inspected but not turned into a batch, signed, or executed. The technical live-validation, final local test, and local evidence-commit gates are closed; it is **not publicly released or finally submitted** because the public repository/CI, demo video, social post, and DoraHacks Submit action remain.
 
 The separate official Hello World journey is complete and independently evidenced on Sepolia. It is not product-deployment evidence.
 
@@ -68,7 +68,7 @@ The official images were subsequently acquired and the full stack ran successful
 
 ### B-003 — Source/release and submission packaging are incomplete
 
-- A reviewed local source commit exists, but the live-evidence update still needs its final local commit; there is no release tag, public remote, or CI run.
+- Reviewed local source and live-evidence commits exist on `main`; there is no release tag, public remote, or CI run.
 - Deployment was performed through Remix/MetaMask rather than `scripts/deploy-sepolia.mjs`. The read-only `scripts/smoke-sepolia.mjs` has run successfully against the live address.
 - The live browser flow was manually verified and a persisted screenshot manifest exists. There is still no automated live-chain browser test, evidence-export script, demo recording, public repository URL, or release artifact.
 - The current online npm audit reports 16 development/transitive findings (`0` critical, `2` high, `6` moderate, `8` low). They flow through the pinned Nox/Hardhat toolchain and have no compatible direct-dependency fix; no blanket `npm audit fix` was run because it could break the required integration stack.
@@ -108,6 +108,5 @@ The official images were subsequently acquired and the full stack ran successful
 
 ## Next actions
 
-1. Review the final diff and secret/PII scan, then create a new local commit for the live evidence package.
-2. Record and verify the maximum-four-minute demo using the persisted live receipts/screenshots; do not sign or execute the imported Safe action.
-3. Only with explicit user approval, publish the repository, run public CI, upload the video, publish the social post, and perform the final DoraHacks Submit action.
+1. Record and verify the maximum-four-minute demo using the persisted live receipts/screenshots; do not sign or execute the imported Safe action.
+2. Only with explicit user approval, publish the repository, run public CI, upload the video, publish the social post, and perform the final DoraHacks Submit action.
