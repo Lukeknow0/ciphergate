@@ -6,7 +6,7 @@
 
 ## Current verdict
 
-CipherGate is a compiling local integration build with green current non-Docker unit/static/preview-build checks and a passing official Docker-backed Nox E2E. It is **not submission-ready**: CipherGate has not been deployed to Sepolia, the production browser flow has not been exercised against a live CipherGate deployment, the advisory Safe JSON has not been imported through an actual Safe, and no public release exists.
+CipherGate is deployed to Sepolia with green current non-Docker unit/static/preview-build checks, a passing official Docker-backed Nox E2E, and a passing read-only Sepolia smoke test. It is **not submission-ready**: the production browser flow has not been exercised against the live deployment, the advisory Safe JSON has not been imported through an actual Safe, and no public release exists.
 
 The separate official Hello World journey is complete and independently evidenced on Sepolia. It is not product-deployment evidence.
 
@@ -34,6 +34,7 @@ The separate official Hello World journey is complete and independently evidence
 - Passed the ABI/action-bound public-surface check and unconfigured frontend preview build.
 - Completed manual `ego-browser` QA of the unconfigured preview at desktop (`1561×937`) and mobile (`390×844`) viewports: every action stayed disabled, the configuration warning remained visible, no horizontal overflow was present, all controls stayed within the mobile viewport, and the first- and third-party license links returned their expected text.
 - Passed `npm run test:nox` against the official Docker-backed Nox stack with exit code zero, two green cases, and `2 passing (2 nodejs)`. The run exercised real wallet/contract proof binding, private-attribute ACL negatives, proof retrieval and malformed/cross-intent proof rejection, action/audit/input replay rejection, one-time evaluation/publication, exact/mismatched action gating, and all six strict Solidity comparison boundaries.
+- Deployed `ConfidentialIntentFirewall` to Ethereum Sepolia through Remix/MetaMask. The successful receipt and read-only smoke verification are recorded in E-012.
 - Adapted only the Hardhat shared-RPC test harness by binding each submitter wallet client's `getAddresses()` to its own `account.address`; the helper otherwise returns multiple accounts and can make the handle SDK choose the wrong proof subject. This is test-environment account selection, not a production mock of Nox, proofs, encryption, the contract, or policy evaluation.
 - Acquired and ran the official Nox Docker images. After the successful run, restored Containers proxy to `Same as host proxy`, fully restarted Docker Desktop, and verified in the UI that `Same as host proxy = 1`, `Manual = 0`, and `No proxy = 0`. The engine was running, `docker version` returned normal server details, and no Nox/temporary containers remained.
 - Added an MIT license, third-party notices, pinned GitHub Actions definitions, `.nvmrc`, `.env.example`, and Sepolia deploy/read-only-smoke helpers.
@@ -55,7 +56,7 @@ The official images were subsequently acquired and the full stack ran successful
 
 ### B-002 — Live product and Safe validation are incomplete
 
-- CipherGate has no Sepolia address or product transaction hash.
+- CipherGate is deployed at `0xe0df8484d6986e1ef9b4ef04a263d72708560b71`; the production browser flow has not yet been exercised against it.
 - The browser implementation has not been tested against a deployed CipherGate address; only its unit tests and explicit unconfigured preview build have passed.
 - The production build intentionally requires a non-zero `CIPHERGATE_CONTRACT_ADDRESS`.
 - The Transaction Builder JSON has not been imported into an actual Safe. Its expected nonce and deadline appear in commitment/description metadata, but the JSON format itself cannot enforce them at execution.
@@ -82,7 +83,7 @@ The official images were subsequently acquired and the full stack ran successful
 | Commitment-bound Safe adapter | PASS (9/9) |
 | Unconfigured frontend preview build | PASS |
 | Unconfigured desktop/mobile manual browser QA | PASS |
-| Production frontend build with deployed address | NOT RUN; no CipherGate address |
+| Production frontend build with deployed address | PASS (E-012 address) |
 | Official Nox Docker E2E | PASS (2/2; `2 passing (2 nodejs)`) |
 | Invalid/cross-contract/cross-intent proof rejection | PASS in official Nox E2E |
 | Private-attribute ACL/decryption negatives | PASS in official Nox E2E |
@@ -95,7 +96,7 @@ The official images were subsequently acquired and the full stack ran successful
 | Online dependency audit | REVIEW (16: 0 critical / 2 high / 6 moderate / 8 low; no compatible direct fix) |
 | Live-chain browser flow | NOT RUN |
 | Actual Safe import/API validation | NOT RUN |
-| CipherGate Sepolia deployment and smoke test | NOT PERFORMED |
+| CipherGate Sepolia deployment and smoke test | PASS |
 | Local Git repository | PASS |
 | Reviewed source commit / clean tree at creation | PASS locally |
 | License / notices / CI definition | CREATED locally; CI NOT RUN |

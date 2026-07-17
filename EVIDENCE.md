@@ -155,7 +155,7 @@ Coverage boundaries:
 - `test:safe` covers the Safe v1 shape/checksum oracle, commitment sensitivity to every action field, changed-action rejection, address/number/deadline validation, deployed-code/live-nonce checks, and UNKNOWN/REVIEW/BLOCK rejection.
 - `vectors` is a dependency-free mirror of the policy truth table; it does not prove Nox execution.
 - `test:surface` is an ABI/event-name check. It does not inspect transaction traces, storage, timing, gas, or all possible metadata leakage.
-- The production build is deliberately not counted as passing because no non-zero deployed `CIPHERGATE_CONTRACT_ADDRESS` exists.
+- The production build requires a non-zero deployed `CIPHERGATE_CONTRACT_ADDRESS`; it passed with the E-012 address on 2026-07-17 CST.
 
 <a id="e-010--nox-docker-e2e-blocker"></a>
 
@@ -237,9 +237,30 @@ An online `npm audit` for the current dependency graph reports 16 findings: 0 cr
 
 ## E-012 — CipherGate live deployment
 
-**Status:** NOT PERFORMED
+**Status:** VERIFIED — DEPLOYMENT RECEIPT AND READ-ONLY SMOKE PASS
 
-CipherGate has no Sepolia address, deployment transaction, live encrypted-intent transaction, Safe import/proposal submission, public repository, video, social post, or final DoraHacks project submission. `scripts/deploy-sepolia.mjs` and the read-only `scripts/smoke-sepolia.mjs` now exist but have not been run. Consequential actions remain subject to explicit user approval.
+- Network: Ethereum Sepolia (`chainId 11155111`)
+- Deployer: `0x309BD0006389C29C6b691d6d12Df83DafeC85316`
+- Contract: `ConfidentialIntentFirewall`
+- Contract address: `0xe0df8484d6986e1ef9b4ef04a263d72708560b71`
+- Deployment transaction: `0x515098f6f1894202bf895c4f3af909b5493d4733611ec06c0fcdd0db2e15d078`
+- Explorer: https://sepolia.etherscan.io/tx/0x515098f6f1894202bf895c4f3af909b5493d4733611ec06c0fcdd0db2e15d078
+- Block: `11292005`; receipt status: `0x1`; `to: null`
+- Runtime bytecode: non-empty; smoke hash: `0xf1c4febb28e9a7f005693b00d56364fc4a96a124a666756512a698ebba1218fb`
+- `owner()` and `auditor()` both return the authorized wallet.
+- `policyVersion()` returns `1`.
+- `policyHash()` returns `0xd9b7aa2496e739c17db5c0c551eeb5089cb8ec567dcb61f6e5290ea0ddf05802`.
+- `MAX_ACTION_LIFETIME()` returns `604800` seconds (seven days).
+
+Reproduction:
+
+```bash
+SEPOLIA_RPC_URL=https://ethereum-sepolia-rpc.publicnode.com \
+CIPHERGATE_CONTRACT_ADDRESS=0xe0df8484d6986e1ef9b4ef04a263d72708560b71 \
+npm run smoke:sepolia
+```
+
+The smoke command exited zero on 2026-07-17 CST. This evidence covers deployment and public metadata only; the live browser intent flow and Safe import remain pending.
 
 ## E-013 — Source control and release evidence
 

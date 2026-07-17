@@ -2,7 +2,7 @@
 
 CipherGate is a pre-execution policy layer for treasury intents. It uses iExec Nox encrypted values to evaluate an amount, risk score, and counterparty flags before an exact, precommitted Safe action may be exported for human review.
 
-> **Current status (2026-07-17): security-hardened local integration build with the official Docker-backed Nox E2E passing; not a live CipherGate deployment or submission-ready release.** The contract and current non-Docker unit/static/preview-build checks are green, and `npm run test:nox` now exits zero with two green cases and `2 passing (2 nodejs)` against the official Nox stack. CipherGate itself is still not deployed on Sepolia, the production browser flow has not run against a live CipherGate, the advisory Safe JSON has not been imported into an actual Safe, and no public release exists. The separate official Nox Hello World deployment and encrypted deposit smoke test are live on Sepolia.
+> **Current status (2026-07-17): security-hardened CipherGate Sepolia deployment with the official Docker-backed Nox E2E passing; not submission-ready.** CipherGate is deployed at `0xe0df8484d6986e1ef9b4ef04a263d72708560b71` and the read-only Sepolia smoke test passes. The production browser flow, actual Safe import, and public release remain pending. The separate official Nox Hello World deployment and encrypted deposit smoke test are live on Sepolia.
 
 ## What exists today
 
@@ -90,7 +90,7 @@ npm run test:nox
 | Lockfile artifact metadata | PASS, 202/202 dependency entries contain `resolved` and `integrity` | [E-011](EVIDENCE.md#e-011--dependency-lock-synchronization) |
 | Official npm-registry isolated `npm ci` + aggregate check for this exact revision | PASS | [E-011](EVIDENCE.md#e-011--dependency-lock-synchronization) |
 | Online `npm audit` | REVIEW: 16 development/transitive findings (0 critical, 2 high, 6 moderate, 8 low); no compatible direct fix through the pinned Nox/Hardhat path, so no blanket fix was applied | [E-011](EVIDENCE.md#e-011--dependency-lock-synchronization) |
-| CipherGate Sepolia deployment | NOT PERFORMED | [E-012](EVIDENCE.md#e-012--ciphergate-live-deployment) |
+| CipherGate Sepolia deployment | PASS | [E-012](EVIDENCE.md#e-012--ciphergate-live-deployment) |
 | Local Git repository / reviewed source commit | PASS locally; no remote or release tag | [E-013](EVIDENCE.md#e-013--source-control-and-release-evidence) |
 
 ## Live onboarding evidence
@@ -114,4 +114,4 @@ The encrypted deposit receipt has `status: 0x1` and targets the canonical `0x372
 - [iExec Nox feedback](feedback.md)
 - [Registration status](REGISTRATION_STATUS.md)
 
-No public repository, CI run, video, social post, CipherGate deployment, Safe import/signature/execution, or final hackathon submission has been performed. A reviewed initial commit exists in the local `main` repository; it has not been tagged or published.
+No public repository, CI run, video, social post, Safe import/signature/execution, or final hackathon submission has been performed. A reviewed initial commit exists in the local `main` repository; it has not been tagged or published.

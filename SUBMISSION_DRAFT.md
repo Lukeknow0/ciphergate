@@ -84,10 +84,10 @@ The canonical Hello World address is `0x372Be24349fC9162fa45b85c84027059789B2EC0
 - Commitment replay state is submitter-scoped to prevent copied-mempool-hash denial of service. Different accounts can create separate intents for the same Safe action because v1 does not verify a Safe-owner signature or allowlist; reviewers must confirm the JSON verifier, intent ID, and on-chain submitter.
 - Transaction Builder JSON is advisory and cannot enforce the expected Safe nonce/deadline after download. A Guard/Module consuming the same commitment would be required for execution-time enforcement.
 - The payload has not been imported through an actual Safe, and no Safe transaction has been signed or executed.
-- The unconfigured frontend preview passed desktop/mobile browser QA, but it has not run against a live CipherGate address; production browser QA remains pending deployment.
+- The unconfigured frontend preview passed desktop/mobile browser QA. Production browser QA remains pending against the deployed CipherGate address.
 - The exact current revision passed an isolated official-registry `npm ci` plus the complete aggregate check.
 - The current online dependency audit still reports 16 development/transitive findings (0 critical, 2 high, 6 moderate, 8 low). They flow through the pinned Nox/Hardhat path and have no compatible direct fix; no blanket audit fix was applied because it could break the required integration stack.
-- CipherGate has not been deployed to Sepolia, tagged as a release, or published; only a reviewed local source commit exists.
+- CipherGate is deployed to Sepolia, but the source is not tagged or published; only a reviewed local source commit exists.
 - The successful Hello World Sepolia contract and deposit are onboarding evidence only; that address is not CipherGate and must not fill the pending CipherGate deployment field.
 
 ## Required before submission
@@ -101,7 +101,7 @@ The canonical Hello World address is `0x372Be24349fC9162fa45b85c84027059789B2EC0
 - [x] Complete fail-closed desktop/mobile browser QA of the unconfigured preview.
 - [x] Review the complete diff/secret scan and create a clean local source commit.
 - [ ] Add an evidence export and screenshot manifest.
-- [ ] With explicit approval, deploy CipherGate to Sepolia and record address/receipts.
+- [x] With explicit approval, deploy CipherGate to Sepolia and record address/receipts.
 - [ ] Browser-test the production build against the deployed address.
 - [ ] Validate the advisory proposal through an actual Safe import path without signing or execution.
 - [ ] Record and verify a maximum-four-minute demo.
@@ -111,7 +111,7 @@ The canonical Hello World address is `0x372Be24349fC9162fa45b85c84027059789B2EC0
 
 - Source repository: `PENDING`
 - Live/demo URL: `PENDING`
-- CipherGate Sepolia contract: `PENDING`
+- CipherGate Sepolia contract: [`0xe0df8484d6986e1ef9b4ef04a263d72708560b71`](https://sepolia.etherscan.io/address/0xe0df8484d6986e1ef9b4ef04a263d72708560b71)
 - Demo video: `PENDING`
 - Social post: `PENDING`
 - Evidence index: [`EVIDENCE.md`](EVIDENCE.md)
