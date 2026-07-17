@@ -1,6 +1,7 @@
 # Screenshot manifest
 
-**Captured:** 2026-07-18 CST  
+**Captured:** 2026-07-18 CST
+
 **Scope:** CipherGate Sepolia live PASS flow and Safe Transaction Builder import validation
 
 All files were reviewed at original resolution. No private keys, recovery phrases, cookies, authorization headers, passwords, or unrelated personal data are visible. Public Sepolia addresses and transaction metadata are intentionally retained as audit evidence.

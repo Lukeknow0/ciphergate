@@ -1,7 +1,9 @@
 # Live PASS and Safe import field check
 
-**Checked:** 2026-07-18 01:14 CST  
-**Network:** Ethereum Sepolia (`chainId 11155111`)  
+**Checked:** 2026-07-18 01:14 CST
+
+**Network:** Ethereum Sepolia (`chainId 11155111`)
+
 **Method:** fresh read-only RPC queries, transaction-input decoding with the compiled ABI, independent commitment/checksum recomputation, persisted JSON inspection, and Safe Transaction Builder UI import
 
 ## Successful receipts
