@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>CipherGate — Confidential Intent Firewall</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22><rect width=%2264%22 height=%2264%22 rx=%2214%22 fill=%22%230ea5e9%22/><path d=%22M18 20h28v8H26v8h16v8H26v8h20%22 fill=%22none%22 stroke=%22%2306111e%22 stroke-width=%226%22/></svg>" />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <header>
+        <div>
+          <p class="eyebrow">iExec Nox / ETH Sepolia</p>
+          <h1>CipherGate</h1>
+          <p class="lede">A confidential pre-execution policy gate for Safe-compatible treasury intents.</p>
+        </div>
+        <button id="connect">Connect wallet</button>
+      </header>
+
+      <section class="card">
+        <h2>1. Commit the Safe action and submit an encrypted intent</h2>
+        <p class="muted">The action fields below are bound into one on-chain commitment before policy evaluation. They will be visible in the exported Safe JSON and in any eventual public Safe transaction. After submission, these fields are locked.</p>
+        <h3>Safe action (public at export)</h3>
+        <div class="grid">
+          <label>Safe address<input id="safeAddress" placeholder="0x…" /></label>
+          <label>Destination<input id="destination" placeholder="0x…" /></label>
+          <label>Value (wei)<input id="safeValue" inputmode="numeric" value="0" /></label>
+          <label>Calldata<input id="safeData" value="0x" /></label>
+          <label>Safe nonce<input id="safeNonce" inputmode="numeric" value="0" /></label>
+          <label>Action deadline (Unix seconds)<input id="actionDeadline" inputmode="numeric" placeholder="Future timestamp, max 7 days" /></label>
+        </div>
+        <p class="meta">Before submission and export, CipherGate checks that the Safe address has contract code and that its live <code>nonce()</code> equals the form value. The nonce is then bound only by the CipherGate commitment and JSON metadata: Safe Transaction Builder does not enforce it on import, so owners must check it again. This is an advisory adapter, not a Safe Guard or Module; execution-time enforcement requires a Guard or Module.</p>
+        <h3>Confidential policy inputs</h3>
+        <p class="muted">Amount, risk, and flags are sent over TLS to the trusted Nox Gateway. Only encrypted handles and proofs are submitted on-chain. A fresh random opaque audit ID is generated locally; only its hash is public.</p>
+        <div class="grid">
+          <label>Amount<input id="amount" inputmode="numeric" placeholder="1000" /></label>
+          <label>Risk score (0–100)<input id="risk" inputmode="numeric" placeholder="20" /></label>
+          <label>Counterparty flags<input id="flags" inputmode="numeric" placeholder="0" /></label>
+          <label>Opaque audit ID<input id="audit" placeholder="Generated locally with secure randomness" /></label>
+        </div>
+        <button id="submit" class="primary" disabled>Encrypt &amp; submit committed intent</button>
+        <p id="intentMeta" class="meta">No intent submitted.</p>
+        <p id="actionMeta" class="meta">No Safe action committed.</p>
+      </section>
+
+      <section class="card">
+        <h2>2. Evaluate and disclose</h2>
+        <p class="muted">Evaluation requires the owner/auditor. The normalized result is publicly decryptable; publication verifies Nox's proof on-chain, so any account may relay it.</p>
+        <div class="actions">
+          <button id="evaluate" disabled>Evaluate encrypted policy</button>
+          <button id="decrypt" disabled>Fetch decision proof</button>
+          <button id="publish" disabled>Publish normalized decision</button>
+        </div>
+        <div class="decision">
+          <span id="decisionBadge" class="badge unknown">UNKNOWN</span>
+          <span id="policy">Policy: —</span>
+        </div>
+        <p id="proposalState" class="meta">Safe proposal construction is locked until an on-chain PASS decision.</p>
+      </section>
+
+      <section class="card">
+        <h2>3. Export Safe Transaction Builder batch</h2>
+        <p class="muted">Export is enabled only after CipherGate verifies a PASS proof for the exact committed action, confirms that its deadline has not expired, and rechecks the Safe's live nonce. The JSON contains the public Safe address, destination, value, calldata, nonce metadata, and deadline, but the nonce remains advisory at import. CipherGate never signs or executes it.</p>
+        <button id="export" class="primary" disabled>Export checksummed Safe batch</button>
+      </section>
+
+      <p id="status" class="status" aria-live="polite">Connect a wallet to begin.</p>
+      <footer>
+        <a href="https://docs.noxprotocol.io/getting-started/hello-world">Official Nox docs</a>
+        <span>·</span>
+        <a href="./LICENSE.txt">CipherGate license</a>
+        <span>·</span>
+        <a href="./THIRD_PARTY_LICENSES.txt">Third-party licenses</a>
+        <span>·</span>
+        <span>Advisory adapter only — not a Safe Guard. This interface never signs or executes a Safe transaction.</span>
+      </footer>
+    </main>
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,103 @@
+// Narrow ABI used by the browser. Keep this in sync with
+// contracts/ConfidentialIntentFirewall.sol.
+export const firewallAbi = [
+  {
+    type: "event",
+    name: "IntentSubmitted",
+    anonymous: false,
+    inputs: [
+      { indexed: true, name: "intentId", type: "uint256" },
+      { indexed: true, name: "auditId", type: "bytes32" },
+      { indexed: true, name: "submitter", type: "address" },
+      { indexed: false, name: "actionCommitment", type: "bytes32" },
+      { indexed: false, name: "actionDeadline", type: "uint64" },
+      { indexed: false, name: "policyVersion", type: "uint64" },
+      { indexed: false, name: "policyHash", type: "bytes32" },
+    ],
+  },
+  {
+    type: "function",
+    name: "owner",
+    stateMutability: "view",
+    inputs: [],
+    outputs: [{ name: "", type: "address" }],
+  },
+  {
+    type: "function",
+    name: "auditor",
+    stateMutability: "view",
+    inputs: [],
+    outputs: [{ name: "", type: "address" }],
+  },
+  {
+    type: "function",
+    name: "submitIntent",
+    stateMutability: "nonpayable",
+    inputs: [
+      { name: "amountHandle", type: "bytes32" },
+      { name: "amountProof", type: "bytes" },
+      { name: "riskScoreHandle", type: "bytes32" },
+      { name: "riskScoreProof", type: "bytes" },
+      { name: "counterpartyFlagsHandle", type: "bytes32" },
+      { name: "counterpartyFlagsProof", type: "bytes" },
+      { name: "auditId", type: "bytes32" },
+      { name: "actionCommitment", type: "bytes32" },
+      { name: "actionDeadline", type: "uint64" },
+    ],
+    outputs: [{ name: "intentId", type: "uint256" }],
+  },
+  {
+    type: "function",
+    name: "evaluateEncryptedPolicy",
+    stateMutability: "nonpayable",
+    inputs: [{ name: "intentId", type: "uint256" }],
+    outputs: [],
+  },
+  {
+    type: "function",
+    name: "publishDecision",
+    stateMutability: "nonpayable",
+    inputs: [
+      { name: "intentId", type: "uint256" },
+      { name: "decryptionProof", type: "bytes" },
+    ],
+    outputs: [],
+  },
+  {
+    type: "function",
+    name: "getIntent",
+    stateMutability: "view",
+    inputs: [{ name: "intentId", type: "uint256" }],
+    outputs: [
+      {
+        name: "",
+        type: "tuple",
+        components: [
+          { name: "submitter", type: "address" },
+          { name: "auditorAtSubmission", type: "address" },
+          { name: "auditId", type: "bytes32" },
+          { name: "actionCommitment", type: "bytes32" },
+          { name: "policyHash", type: "bytes32" },
+          { name: "policyVersion", type: "uint64" },
+          { name: "createdAt", type: "uint64" },
+          { name: "actionDeadline", type: "uint64" },
+          { name: "amount", type: "bytes32" },
+          { name: "riskScore", type: "bytes32" },
+          { name: "counterpartyFlags", type: "bytes32" },
+          { name: "encryptedDecision", type: "bytes32" },
+          { name: "publicDecision", type: "uint8" },
+        ],
+      },
+    ],
+  },
+  {
+    type: "function",
+    name: "safeProposalAllowed",
+    stateMutability: "view",
+    inputs: [
+      { name: "intentId", type: "uint256" },
+      { name: "actionCommitment", type: "bytes32" },
+    ],
+    outputs: [{ name: "", type: "bool" }],
+  },
+];

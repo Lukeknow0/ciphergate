@@ -1,0 +1,7 @@
+[
+  {"name":"low risk","amount":1000,"riskScore":20,"counterpartyFlags":0,"expected":"PASS"},
+  {"name":"review band","amount":1000,"riskScore":60,"counterpartyFlags":0,"expected":"REVIEW"},
+  {"name":"high risk","amount":1000,"riskScore":90,"counterpartyFlags":0,"expected":"BLOCK"},
+  {"name":"high amount","amount":10001,"riskScore":20,"counterpartyFlags":0,"expected":"BLOCK"},
+  {"name":"blocked counterparty","amount":1000,"riskScore":20,"counterpartyFlags":1,"expected":"BLOCK"}
+]

@@ -1,0 +1,10 @@
+node_modules/
+node_modules.incomplete/
+cache/
+artifacts/
+frontend/dist/
+offchain-services.log
+.env
+.env.*
+!.env.example
+.DS_Store

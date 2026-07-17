@@ -1,0 +1,10 @@
+{
+  "name": "ciphergate-frontend",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "npm --prefix .. run build:frontend",
+    "build:preview": "npm --prefix .. run build:frontend:preview",
+    "dev": "npm run build:preview && python3 -m http.server 4173 --directory dist"
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "name": "ciphergate",
+  "private": true,
+  "type": "module",
+  "packageManager": "npm@10.9.8",
+  "engines": {
+    "node": ">=22.22.3 <23"
+  },
+  "scripts": {
+    "build:frontend": "node scripts/build-frontend.mjs",
+    "build:frontend:preview": "node scripts/build-frontend.mjs --allow-unconfigured",
+    "check": "npm run compile && npm run test:unit && npm run test:frontend && npm run test:safe && npm run vectors && npm run test:surface && npm run test:docs && npm run build:frontend:preview",
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "test:unit": "NOX_SKIP_STACK=1 node --import tsx/esm --test test/contract-access.test.ts",
+    "test:nox": "hardhat test test/nox-e2e.test.ts",
+    "test:safe": "node --test test/safe-adapter.test.mjs",
+    "test:frontend": "node --test test/frontend-nox-adapter.test.mjs",
+    "test:docs": "node scripts/check-doc-links.mjs",
+    "test:surface": "node scripts/check-public-surface.mjs",
+    "vectors": "node scripts/validate-policy-vectors.mjs",
+    "deploy:sepolia": "npm run compile && node scripts/deploy-sepolia.mjs",
+    "smoke:sepolia": "node scripts/smoke-sepolia.mjs"
+  },
+  "devDependencies": {
+    "@iexec-nox/handle": "0.1.0-beta.13",
+    "@iexec-nox/nox-hardhat-plugin": "0.1.0",
+    "@iexec-nox/nox-protocol-contracts": "0.2.4",
+    "@nomicfoundation/hardhat-toolbox-viem": "5.0.7",
+    "@types/node": "22.19.7",
+    "esbuild": "0.28.1",
+    "hardhat": "3.9.1",
+    "tsx": "4.23.1",
+    "typescript": "5.8.3",
+    "viem": "2.55.2"
+  }
+}
