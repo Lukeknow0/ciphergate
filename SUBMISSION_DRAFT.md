@@ -1,6 +1,6 @@
 # Submission draft
 
-> **Draft for DoraHacks form entry — do not submit yet.** Public release links are populated; re-check all claims against [`EVIDENCE.md`](EVIDENCE.md) before final submission.
+> **Submitted to DoraHacks on 2026-07-18.** This remains the source record for the submitted fields; re-check all claims against [`EVIDENCE.md`](EVIDENCE.md) before any later edit.
 
 ## Project name
 
@@ -56,7 +56,7 @@ CipherGate separates confidential evaluation from signing and execution:
 - MIT license, provenance/third-party notices, pinned CI definition, `.nvmrc`, `.env.example`, and Sepolia deploy/read-only-smoke helpers; the read-only smoke helper has run against the live address.
 - Live Sepolia Intent #0 completed submit, encrypted evaluation, and proof-bound publication with successful receipts and an on-chain `PASS`.
 - The exact checksummed batch imported through Safe Transaction Builder as `1 uploaded`; fields were inspected without creating a batch, signing, or execution.
-- Public source repository, passing CI/Pages deployment, `v1.0.0-hackathon` demo release, and the required [X post with demo video](https://x.com/mr_luhs/status/2078331526593577406) are available; DoraHacks submission remains pending.
+- Public source repository, passing CI/Pages deployment, `v1.0.0-hackathon` demo release, required [X post with demo video](https://x.com/mr_luhs/status/2078331526593577406), and [DoraHacks BUIDL 47145](https://dorahacks.io/buidl/47145) are available. The BUIDL is `Under Review`; the organizer currently lists submissions privately.
 
 ## Verified evidence as of 2026-07-18
 
@@ -93,7 +93,7 @@ The canonical Hello World address is `0x372Be24349fC9162fa45b85c84027059789B2EC0
 - The unconfigured frontend preview passed desktop/mobile browser QA, and the production browser completed the live PASS/export path. Responsive production QA across multiple viewports was not repeated.
 - The exact current revision passed an isolated official-registry `npm ci` plus the complete aggregate check.
 - The current online dependency audit still reports 16 development/transitive findings (0 critical, 2 high, 6 moderate, 8 low). They flow through the pinned Nox/Hardhat path and have no compatible direct fix; no blanket audit fix was applied because it could break the required integration stack.
-- CipherGate is deployed and Sourcify-verified on Sepolia. The source is public, Pages is live, the tagged demo release is published, and the required [X post with demo video](https://x.com/mr_luhs/status/2078331526593577406) is live; final DoraHacks submission remains pending.
+- CipherGate is deployed and Sourcify-verified on Sepolia. The source is public, Pages is live, the tagged demo release is published, the required [X post with demo video](https://x.com/mr_luhs/status/2078331526593577406) is live, and [DoraHacks BUIDL 47145](https://dorahacks.io/buidl/47145) is submitted and `Under Review`.
 - The successful Hello World Sepolia contract and deposit are onboarding evidence only; that address is not CipherGate.
 
 ## Required before submission
@@ -112,7 +112,7 @@ The canonical Hello World address is `0x372Be24349fC9162fa45b85c84027059789B2EC0
 - [x] Validate the advisory proposal through an actual Safe import path without signing or execution.
 - [x] Publish source, CI/Pages frontend, and verified 3:32 demo release.
 - [x] With explicit approval, publish the required social post with attached demo video and repository link.
-- [ ] With explicit approval immediately before the final action, complete DoraHacks submission.
+- [x] With explicit approval immediately before the final action, submit DoraHacks BUIDL 47145; current status `Under Review`.
 
 ## Final links
 
@@ -121,5 +121,6 @@ The canonical Hello World address is `0x372Be24349fC9162fa45b85c84027059789B2EC0
 - CipherGate Sepolia contract: [`0xe0df8484d6986e1ef9b4ef04a263d72708560b71`](https://sepolia.etherscan.io/address/0xe0df8484d6986e1ef9b4ef04a263d72708560b71)
 - Demo video: [v1.0.0-hackathon release asset](https://github.com/Lukeknow0/ciphergate/releases/tag/v1.0.0-hackathon)
 - Social post: [@mr_luhs/status/2078331526593577406](https://x.com/mr_luhs/status/2078331526593577406) (3:32 demo video attached)
+- DoraHacks BUIDL: [47145](https://dorahacks.io/buidl/47145) (`Under Review`; organizer-private list)
 - Evidence index: [`EVIDENCE.md`](EVIDENCE.md)
 - Technical feedback: [`feedback.md`](feedback.md)

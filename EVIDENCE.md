@@ -265,15 +265,15 @@ The smoke command exited zero on 2026-07-17 CST. On 2026-07-18, two independent 
 
 ## E-013 — Source control and release evidence
 
-**Status:** PUBLIC SOURCE, CI, PAGES, VIDEO RELEASE, AND REQUIRED X POST VERIFIED
+**Status:** PUBLIC SOURCE, CI, PAGES, VIDEO RELEASE, REQUIRED X POST, AND DORAHACKS SUBMISSION VERIFIED
 
 `git rev-parse --show-toplevel` resolves to the dedicated CipherGate directory, and the branch is `main`. The reviewed source baseline was created after the aggregate test, exact-revision isolated `npm ci` reproduction, browser QA, security review, diff validation, and secret scan. The live PASS/Safe import evidence and final verification record are also committed locally; `git rev-parse HEAD` is the authoritative current local identifier.
 
-The reviewed source is public at [Lukeknow0/ciphergate](https://github.com/Lukeknow0/ciphergate). CI run [`29625813839`](https://github.com/Lukeknow0/ciphergate/actions/runs/29625813839) passed `local-checks`, Docker-backed `nox-e2e`, and `deploy-pages`. The production frontend is live at [lukeknow0.github.io/ciphergate](https://lukeknow0.github.io/ciphergate/).
+The reviewed source is public at [Lukeknow0/ciphergate](https://github.com/Lukeknow0/ciphergate). CI run [`29630254354`](https://github.com/Lukeknow0/ciphergate/actions/runs/29630254354) passed `local-checks`, Docker-backed `nox-e2e`, and `deploy-pages`. The production frontend is live at [lukeknow0.github.io/ciphergate](https://lukeknow0.github.io/ciphergate/).
 
-Release [`v1.0.0-hackathon`](https://github.com/Lukeknow0/ciphergate/releases/tag/v1.0.0-hackathon) is published with `CipherGate-demo.mp4` (SHA-256 `851d32e27c815d3a4aedef7821085057abaa0ef875e68b59a656050f227906bf`) and `CipherGate-cover.png` (SHA-256 `0f6ab7dae0e78987ad5aa81a3fc30640890b7abeeb31e9871049b79465d46e2f`). The required post is public at [@mr_luhs/status/2078331526593577406](https://x.com/mr_luhs/status/2078331526593577406): browser inspection confirmed the approved text, a linked `@iEx_ec` mention, repository link, and a 3:32 attached video. Its screenshot is hash-indexed in [`evidence/SCREENSHOT_MANIFEST.md`](evidence/SCREENSHOT_MANIFEST.md). The manual deployment used Remix/MetaMask, and the read-only smoke script has run successfully.
+Release [`v1.0.0-hackathon`](https://github.com/Lukeknow0/ciphergate/releases/tag/v1.0.0-hackathon) is published with `CipherGate-demo.mp4` (SHA-256 `851d32e27c815d3a4aedef7821085057abaa0ef875e68b59a656050f227906bf`) and `CipherGate-cover.png` (SHA-256 `0f6ab7dae0e78987ad5aa81a3fc30640890b7abeeb31e9871049b79465d46e2f`). The required post is public at [@mr_luhs/status/2078331526593577406](https://x.com/mr_luhs/status/2078331526593577406): browser inspection confirmed the approved text, a linked `@iEx_ec` mention, repository link, and a 3:32 attached video. The user explicitly approved final form submission; DoraHacks then confirmed BUIDL [`47145`](https://dorahacks.io/buidl/47145) as submitted and listed it `Under Review`. The organizer currently marks the BUIDL list private. Submission and status screenshots are hash-indexed in [`evidence/SCREENSHOT_MANIFEST.md`](evidence/SCREENSHOT_MANIFEST.md). The manual deployment used Remix/MetaMask, and the read-only smoke script has run successfully.
 
-Still pending: final DoraHacks submission.
+No project-side publishing gate remains. DoraHacks organizer review is pending.
 
 ## E-014 — Proof-bound decision and browser integration
 
