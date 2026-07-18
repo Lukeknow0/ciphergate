@@ -27,4 +27,4 @@
 
 Registration is complete; there are no remaining organizer-question actions recorded for the hacker registration. The wallet signatures and transactions listed above occurred only during the separately authorized Hello World journey.
 
-The next event action is the project submission, which is distinct from hacker registration. CipherGate's local technical, Sepolia PASS, Safe import, and evidence gates are closed. Public repository/CI, source publication, demo upload, social publication, and final DoraHacks project submission still require explicit approval at the moment of action.
+The next event action is the project submission, which is distinct from hacker registration. CipherGate's local technical, Sourcify exact-match, Sepolia PASS, Safe import, and evidence gates are closed. Public repository/CI/live site, demo upload, social publication, and final DoraHacks project submission still require explicit approval at the moment of action.

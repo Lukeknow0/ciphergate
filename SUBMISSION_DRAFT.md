@@ -63,6 +63,7 @@ CipherGate separates confidential evaluation from signing and execution:
 - Official Hello World deployment: [`0x372Be24349fC9162fa45b85c84027059789B2EC0`](https://sepolia.etherscan.io/address/0x372Be24349fC9162fa45b85c84027059789B2EC0)
 - Official encrypted deposit: [`0x3592f3f94a6d930edd5632019f750c0e70f8411687ce03cc9753a5ccaff3b138`](https://sepolia.etherscan.io/tx/0x3592f3f94a6d930edd5632019f750c0e70f8411687ce03cc9753a5ccaff3b138)
 - CipherGate deployment: [`0xe0df8484d6986e1ef9b4ef04a263d72708560b71`](https://sepolia.etherscan.io/address/0xe0df8484d6986e1ef9b4ef04a263d72708560b71), deployment receipt [`0x515098f6…e15d078`](https://sepolia.etherscan.io/tx/0x515098f6f1894202bf895c4f3af909b5493d4733611ec06c0fcdd0db2e15d078), `status = 1`
+- Source verification: [Sourcify creation and runtime `exact_match`](https://sourcify.dev/server/v2/contract/11155111/0xe0df8484d6986e1ef9b4ef04a263d72708560b71)
 - Live PASS: submit [`0xf40e087b…5c605bd`](https://sepolia.etherscan.io/tx/0xf40e087b798a53aa48d686faa074db648f3374d9876a1e67976a6b11f5c605bd), evaluate [`0xe3f6406b…6771e50`](https://sepolia.etherscan.io/tx/0xe3f6406b36d44ed33105a913e2d49e54fec7a4ed22935972693d5833e6771e50), publish [`0x5d1a812d…ea19dfd`](https://sepolia.etherscan.io/tx/0x5d1a812da0a4258b31e912549754581fa46f09b9f766e02d5d3973299ea19dfd); all `status = 1`
 - Safe import: `0xDE9612a94C5B660a8321CbeAee44a808DA7E6864`, `1 uploaded`, checksum and exact action fields matched; no Safe signature or execution
 - Solidity compile: PASS
@@ -92,7 +93,7 @@ The canonical Hello World address is `0x372Be24349fC9162fa45b85c84027059789B2EC0
 - The unconfigured frontend preview passed desktop/mobile browser QA, and the production browser completed the live PASS/export path. Responsive production QA across multiple viewports was not repeated.
 - The exact current revision passed an isolated official-registry `npm ci` plus the complete aggregate check.
 - The current online dependency audit still reports 16 development/transitive findings (0 critical, 2 high, 6 moderate, 8 low). They flow through the pinned Nox/Hardhat path and have no compatible direct fix; no blanket audit fix was applied because it could break the required integration stack.
-- CipherGate is deployed to Sepolia, but the source is not tagged or published; reviewed commits exist only in the local repository.
+- CipherGate is deployed and Sourcify-verified on Sepolia, but the Git repository is not tagged or published; reviewed commits exist only locally.
 - The successful Hello World Sepolia contract and deposit are onboarding evidence only; that address is not CipherGate.
 
 ## Required before submission

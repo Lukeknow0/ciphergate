@@ -251,6 +251,7 @@ An online `npm audit` for the current dependency graph reports 16 findings: 0 cr
 - `policyVersion()` returns `1`.
 - `policyHash()` returns `0xd9b7aa2496e739c17db5c0c551eeb5089cb8ec567dcb61f6e5290ea0ddf05802`.
 - `MAX_ACTION_LIFETIME()` returns `604800` seconds (seven days).
+- Sourcify v2 verification: [`creationMatch = exact_match`, `runtimeMatch = exact_match`](https://sourcify.dev/server/v2/contract/11155111/0xe0df8484d6986e1ef9b4ef04a263d72708560b71), verified at `2026-07-17T13:29:40Z`.
 
 Reproduction:
 

@@ -91,6 +91,7 @@ npm run test:nox
 | Official npm-registry isolated `npm ci` + aggregate check for this exact revision | PASS | [E-011](EVIDENCE.md#e-011--dependency-lock-synchronization) |
 | Online `npm audit` | REVIEW: 16 development/transitive findings (0 critical, 2 high, 6 moderate, 8 low); no compatible direct fix through the pinned Nox/Hardhat path, so no blanket fix was applied | [E-011](EVIDENCE.md#e-011--dependency-lock-synchronization) |
 | CipherGate Sepolia deployment | PASS | [E-012](EVIDENCE.md#e-012--ciphergate-live-deployment) |
+| Sourcify source verification | EXACT MATCH for creation and runtime bytecode | [E-012](EVIDENCE.md#e-012--ciphergate-live-deployment) |
 | Production Sepolia PASS flow | PASS; submit/evaluate/publish receipts successful, Intent #0 = `PASS` | [E-015](EVIDENCE.md#e-015--live-sepolia-pass-flow) |
 | Safe Transaction Builder import | PASS; `1 uploaded`, exact fields compared; no signature/execution | [E-016](EVIDENCE.md#e-016--safe-transaction-builder-import) |
 | Local Git repository / reviewed source commit | PASS locally; no remote or release tag | [E-013](EVIDENCE.md#e-013--source-control-and-release-evidence) |
