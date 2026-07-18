@@ -1,12 +1,12 @@
 # Project Status
 
 **Decision:** `GO_USER_DIRECTED`
-**Phase:** public release; final submission pending
+**Phase:** public release; DoraHacks submission pending
 **Updated:** 2026-07-18 CST
 
 ## Current verdict
 
-CipherGate is deployed to Sepolia with a passing official Docker-backed Nox E2E, a production browser PASS flow, a passing read-only Sepolia smoke test, and a successful advisory JSON import through Safe Transaction Builder. The imported transaction was inspected but not turned into a batch, signed, or executed. The public [repository](https://github.com/Lukeknow0/ciphergate), passing [CI/Pages deployment](https://github.com/Lukeknow0/ciphergate/actions/runs/29625661507), live [frontend](https://lukeknow0.github.io/ciphergate/), and [video release](https://github.com/Lukeknow0/ciphergate/releases/tag/v1.0.0-hackathon) are complete. The required social post and final DoraHacks Submit action remain.
+CipherGate is deployed to Sepolia with a passing official Docker-backed Nox E2E, a production browser PASS flow, a passing read-only Sepolia smoke test, and a successful advisory JSON import through Safe Transaction Builder. The imported transaction was inspected but not turned into a batch, signed, or executed. The public [repository](https://github.com/Lukeknow0/ciphergate), passing [CI/Pages deployment](https://github.com/Lukeknow0/ciphergate/actions/runs/29625813839), live [frontend](https://lukeknow0.github.io/ciphergate/), [video release](https://github.com/Lukeknow0/ciphergate/releases/tag/v1.0.0-hackathon), and required [X post with demo video](https://x.com/mr_luhs/status/2078331526593577406) are complete. Final DoraHacks Submit remains.
 
 The separate official Hello World journey is complete and independently evidenced on Sepolia. It is not product-deployment evidence.
 
@@ -67,9 +67,10 @@ The official images were subsequently acquired and the full stack ran successful
 - Replay protection is submitter-scoped to avoid mempool-copy denial of service; v1 does not require a Safe-owner signature or prevent different accounts from creating separate intents for the same action. The exported description identifies the verifier, intent ID, and submitter for review.
 - No Safe Guard or Module consumes the commitment. `Create Batch` was not clicked; signing and execution were not performed and remain outside CipherGate.
 
-### B-003 — Final social and DoraHacks submission are pending
+### B-003 — Final DoraHacks submission is pending
 
 - The source, CI/Pages deployment, and `v1.0.0-hackathon` release are public and linked above.
+- The required X post is public at [status 2078331526593577406](https://x.com/mr_luhs/status/2078331526593577406). It contains the approved CipherGate copy, an actual linked `@iEx_ec` mention, the repository link, and the 3:32 demo video. The related screenshot is hash-indexed in `evidence/SCREENSHOT_MANIFEST.md`.
 - Deployment was performed through Remix/MetaMask rather than `scripts/deploy-sepolia.mjs`. The read-only `scripts/smoke-sepolia.mjs` has run successfully against the live address.
 - The live browser flow was manually verified, a persisted screenshot manifest exists, and the recorded 3:32 demo is attached to the public release. There is still no automated live-chain browser test or generalized evidence-export script.
 - The current online npm audit reports 16 development/transitive findings (`0` critical, `2` high, `6` moderate, `8` low). They flow through the pinned Nox/Hardhat toolchain and have no compatible direct-dependency fix; no blanket `npm audit fix` was run because it could break the required integration stack.
@@ -103,11 +104,11 @@ The official images were subsequently acquired and the full stack ran successful
 | CipherGate Sepolia deployment and smoke test | PASS |
 | Local Git repository | PASS |
 | Reviewed source commit / clean tree at creation | PASS locally |
-| Public repository / CI / Pages | PASS ([run 29625661507](https://github.com/Lukeknow0/ciphergate/actions/runs/29625661507)) |
+| Public repository / CI / Pages | PASS ([run 29625813839](https://github.com/Lukeknow0/ciphergate/actions/runs/29625813839)) |
+| Required X post with demo video | PASS ([status 2078331526593577406](https://x.com/mr_luhs/status/2078331526593577406)) |
 | Screenshot manifest | CREATED and hash-indexed |
 | Release tag / demo | PASS ([v1.0.0-hackathon](https://github.com/Lukeknow0/ciphergate/releases/tag/v1.0.0-hackathon), 3:32) |
 
 ## Next actions
 
-1. With explicit user approval, publish the required X post with the attached demo video and the repository link.
-2. Fill DoraHacks with the public links, then stop immediately before the final Submit action for user confirmation.
+1. Fill DoraHacks with the public links, then stop immediately before the final Submit action for user confirmation.

@@ -2,7 +2,7 @@
 
 CipherGate is a pre-execution policy layer for treasury intents. It uses iExec Nox encrypted values to evaluate an amount, risk score, and counterparty flags before an exact, precommitted Safe action may be exported for human review.
 
-> **Current status (2026-07-18): public Sepolia release candidate.** CipherGate is deployed at `0xe0df8484d6986e1ef9b4ef04a263d72708560b71`. Intent #0 reached proof-published `PASS`, its exact checksummed batch imported successfully into Safe Transaction Builder, and no Safe proposal was signed or executed. The public source repository, Pages frontend, CI run, and `v1.0.0-hackathon` demo release are live; the required social post and final DoraHacks submission remain pending. The separate official Nox Hello World deployment remains onboarding evidence only.
+> **Current status (2026-07-18): public Sepolia release candidate.** CipherGate is deployed at `0xe0df8484d6986e1ef9b4ef04a263d72708560b71`. Intent #0 reached proof-published `PASS`, its exact checksummed batch imported successfully into Safe Transaction Builder, and no Safe proposal was signed or executed. The public source repository, Pages frontend, CI run, `v1.0.0-hackathon` demo release, and required [X post with the 3:32 demo](https://x.com/mr_luhs/status/2078331526593577406) are live; only final DoraHacks submission remains pending. The separate official Nox Hello World deployment remains onboarding evidence only.
 
 ## What exists today
 
@@ -94,7 +94,7 @@ npm run test:nox
 | Sourcify source verification | EXACT MATCH for creation and runtime bytecode | [E-012](EVIDENCE.md#e-012--ciphergate-live-deployment) |
 | Production Sepolia PASS flow | PASS; submit/evaluate/publish receipts successful, Intent #0 = `PASS` | [E-015](EVIDENCE.md#e-015--live-sepolia-pass-flow) |
 | Safe Transaction Builder import | PASS; `1 uploaded`, exact fields compared; no signature/execution | [E-016](EVIDENCE.md#e-016--safe-transaction-builder-import) |
-| Public source, CI, Pages, and demo release | PASS: [repository](https://github.com/Lukeknow0/ciphergate), [CI](https://github.com/Lukeknow0/ciphergate/actions/runs/29625661507), [Pages](https://lukeknow0.github.io/ciphergate/), [release](https://github.com/Lukeknow0/ciphergate/releases/tag/v1.0.0-hackathon) | [E-013](EVIDENCE.md#e-013--source-control-and-release-evidence) |
+| Public source, CI, Pages, demo release, and required X post | PASS: [repository](https://github.com/Lukeknow0/ciphergate), [CI](https://github.com/Lukeknow0/ciphergate/actions/runs/29625813839), [Pages](https://lukeknow0.github.io/ciphergate/), [release](https://github.com/Lukeknow0/ciphergate/releases/tag/v1.0.0-hackathon), [X post](https://x.com/mr_luhs/status/2078331526593577406) | [E-013](EVIDENCE.md#e-013--source-control-and-release-evidence) |
 
 ## Live onboarding evidence
 
@@ -117,4 +117,4 @@ The encrypted deposit receipt has `status: 0x1` and targets the canonical `0x372
 - [iExec Nox feedback](feedback.md)
 - [Registration status](REGISTRATION_STATUS.md)
 
-The public repository, CI run, Pages frontend, and video release are available above. The required social post and final hackathon submission have not been performed. The Safe JSON import was validation-only; no Safe signature or execution occurred.
+The public repository, CI run, Pages frontend, video release, and required X post are available above. Final DoraHacks submission has not been performed. The Safe JSON import was validation-only; no Safe signature or execution occurred.
