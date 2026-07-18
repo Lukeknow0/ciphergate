@@ -265,21 +265,15 @@ The smoke command exited zero on 2026-07-17 CST. On 2026-07-18, two independent 
 
 ## E-013 — Source control and release evidence
 
-**Status:** REVIEWED SOURCE AND LIVE-EVIDENCE COMMITS CREATED; NO PUBLIC RELEASE
+**Status:** PUBLIC SOURCE, CI, PAGES, AND VIDEO RELEASE VERIFIED
 
 `git rev-parse --show-toplevel` resolves to the dedicated CipherGate directory, and the branch is `main`. The reviewed source baseline was created after the aggregate test, exact-revision isolated `npm ci` reproduction, browser QA, security review, diff validation, and secret scan. The live PASS/Safe import evidence and final verification record are also committed locally; `git rev-parse HEAD` is the authoritative current local identifier.
 
-The evidence package still cannot cite:
+The reviewed source is public at [Lukeknow0/ciphergate](https://github.com/Lukeknow0/ciphergate). CI run [`29625661507`](https://github.com/Lukeknow0/ciphergate/actions/runs/29625661507) passed `local-checks`, Docker-backed `nox-e2e`, and `deploy-pages`. The production frontend is live at [lukeknow0.github.io/ciphergate](https://lukeknow0.github.io/ciphergate/).
 
-- a public repository URL or CI run associated with the reviewed source.
-- a release tag or published release artifact.
+Release [`v1.0.0-hackathon`](https://github.com/Lukeknow0/ciphergate/releases/tag/v1.0.0-hackathon) is published with `CipherGate-demo.mp4` (SHA-256 `851d32e27c815d3a4aedef7821085057abaa0ef875e68b59a656050f227906bf`) and `CipherGate-cover.png` (SHA-256 `0f6ab7dae0e78987ad5aa81a3fc30640890b7abeeb31e9871049b79465d46e2f`). A hash-indexed screenshot manifest and live-field check remain under [`evidence/`](evidence/); the manual deployment used Remix/MetaMask, and the read-only smoke script has run successfully.
 
-An MIT `LICENSE`, `THIRD_PARTY_NOTICES.md`, aggregate `npm run check`, pinned two-job GitHub Actions workflow, and deploy/read-only-smoke helpers exist locally. No CI run can exist before publication. A hash-indexed screenshot manifest and live-field check now exist under [`evidence/`](evidence/); the manual deployment used Remix/MetaMask, and the read-only smoke script has run successfully. An automated evidence-export script and demo assets remain absent.
-
-Required closure evidence:
-
-1. Record and verify the maximum-four-minute demo from the committed evidence package.
-2. Run CI after publication and cite the release commit/tag in the demo, deployment record, and final submission.
+Still pending: the required X post with the demo video and the final DoraHacks submission.
 
 ## E-014 — Proof-bound decision and browser integration
 

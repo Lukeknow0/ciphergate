@@ -1,6 +1,6 @@
 # Submission draft
 
-> **Draft only — do not publish yet.** Replace every `PENDING` item and re-check all claims against [`EVIDENCE.md`](EVIDENCE.md) before submission.
+> **Draft for DoraHacks form entry — do not submit yet.** Public release links are populated; re-check all claims against [`EVIDENCE.md`](EVIDENCE.md) before final submission.
 
 ## Project name
 
@@ -56,7 +56,7 @@ CipherGate separates confidential evaluation from signing and execution:
 - MIT license, provenance/third-party notices, pinned CI definition, `.nvmrc`, `.env.example`, and Sepolia deploy/read-only-smoke helpers; the read-only smoke helper has run against the live address.
 - Live Sepolia Intent #0 completed submit, encrypted evaluation, and proof-bound publication with successful receipts and an on-chain `PASS`.
 - The exact checksummed batch imported through Safe Transaction Builder as `1 uploaded`; fields were inspected without creating a batch, signing, or execution.
-- Reviewed source and live-evidence commits created in the local `main` repository; no public remote or release tag yet.
+- Public source repository, passing CI/Pages deployment, and `v1.0.0-hackathon` demo release are available; the required X post and DoraHacks submission remain pending.
 
 ## Verified evidence as of 2026-07-18
 
@@ -93,7 +93,7 @@ The canonical Hello World address is `0x372Be24349fC9162fa45b85c84027059789B2EC0
 - The unconfigured frontend preview passed desktop/mobile browser QA, and the production browser completed the live PASS/export path. Responsive production QA across multiple viewports was not repeated.
 - The exact current revision passed an isolated official-registry `npm ci` plus the complete aggregate check.
 - The current online dependency audit still reports 16 development/transitive findings (0 critical, 2 high, 6 moderate, 8 low). They flow through the pinned Nox/Hardhat path and have no compatible direct fix; no blanket audit fix was applied because it could break the required integration stack.
-- CipherGate is deployed and Sourcify-verified on Sepolia, but the Git repository is not tagged or published; reviewed commits exist only locally.
+- CipherGate is deployed and Sourcify-verified on Sepolia. The source is public, Pages is live, and the tagged demo release is published; the required X post and final DoraHacks submission remain pending.
 - The successful Hello World Sepolia contract and deposit are onboarding evidence only; that address is not CipherGate.
 
 ## Required before submission
@@ -110,15 +110,15 @@ The canonical Hello World address is `0x372Be24349fC9162fa45b85c84027059789B2EC0
 - [x] With explicit approval, deploy CipherGate to Sepolia and record address/receipts.
 - [x] Browser-test the production build against the deployed address through one complete PASS flow.
 - [x] Validate the advisory proposal through an actual Safe import path without signing or execution.
-- [ ] Record and verify a maximum-four-minute demo.
-- [ ] With explicit approval, publish the repository, video, social post, and DoraHacks submission.
+- [x] Publish source, CI/Pages frontend, and verified 3:32 demo release.
+- [ ] With explicit approval, publish the required social post and complete the final DoraHacks submission.
 
 ## Final links
 
-- Source repository: `PENDING`
-- Live/demo URL: `PENDING`
+- Source repository: [github.com/Lukeknow0/ciphergate](https://github.com/Lukeknow0/ciphergate)
+- Live/demo URL: [lukeknow0.github.io/ciphergate](https://lukeknow0.github.io/ciphergate/)
 - CipherGate Sepolia contract: [`0xe0df8484d6986e1ef9b4ef04a263d72708560b71`](https://sepolia.etherscan.io/address/0xe0df8484d6986e1ef9b4ef04a263d72708560b71)
-- Demo video: `PENDING`
+- Demo video: [v1.0.0-hackathon release asset](https://github.com/Lukeknow0/ciphergate/releases/tag/v1.0.0-hackathon)
 - Social post: `PENDING`
 - Evidence index: [`EVIDENCE.md`](EVIDENCE.md)
 - Technical feedback: [`feedback.md`](feedback.md)

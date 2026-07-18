@@ -1,7 +1,7 @@
 # CipherGate threat model (P0)
 
 **Updated:** 2026-07-18 CST
-**Applies to:** the current Sepolia release candidate; not an audited production system
+**Applies to:** the public Sepolia hackathon release; not an audited production system
 
 ## Assets and security goals
 
@@ -79,7 +79,7 @@ Consequences and limits:
 - An exported JSON file can be copied. The browser re-checks the live nonce and deadline before each export, but cannot control a file after download. Safe owners must verify the expected nonce/deadline and exact transaction before signing.
 - A proof-verified PASS can be queried until its deadline for the same commitment. CipherGate does not mark a commitment consumed because it does not observe Safe execution.
 - The proposal JSON imported successfully through the actual Safe Transaction Builder UI, but import acceptance is not Safe enforcement. `Create Batch` was not clicked, and no Safe signature or execution occurred.
-- The local official Nox integration passes with two cases and `2 passing (2 nodejs)`, evidencing the covered proof, ACL, replay, publication, strict-boundary, and action-gate behavior. CipherGate is separately deployed at `0xe0df8484d6986e1ef9b4ef04a263d72708560b71`; one production PASS flow and one Safe import were validated. The separate Hello World Sepolia address remains onboarding evidence, not the CipherGate product.
+- The local official Nox integration passes with two cases and `2 passing (2 nodejs)`, evidencing the covered proof, ACL, replay, publication, strict-boundary, and action-gate behavior. CipherGate is separately deployed at `0xe0df8484d6986e1ef9b4ef04a263d72708560b71`; one production PASS flow and one Safe import were validated. The public source, CI/Pages run, and video release are linked in the README; the separate Hello World Sepolia address remains onboarding evidence, not the CipherGate product.
 - Dependencies are version-pinned, the installed tree matches the synchronized lockfile, and all 202/202 dependency entries contain official-registry `resolved` URLs plus `integrity` digests. The exact current revision passed an isolated official-registry `npm ci` plus `npm run check`. The online audit still reports 16 development/transitive findings (0 critical, 2 high, 6 moderate, 8 low) through the pinned Nox/Hardhat path; no compatible direct fix exists and no blanket fix was applied.
 
 ## Out of scope

@@ -1,12 +1,12 @@
 # Project Status
 
 **Decision:** `GO_USER_DIRECTED`
-**Phase:** release-candidate verification and publication packaging
+**Phase:** public release; final submission pending
 **Updated:** 2026-07-18 CST
 
 ## Current verdict
 
-CipherGate is deployed to Sepolia with a passing official Docker-backed Nox E2E, a production browser PASS flow, a passing read-only Sepolia smoke test, and a successful advisory JSON import through Safe Transaction Builder. The imported transaction was inspected but not turned into a batch, signed, or executed. The technical live-validation, final local test, and local evidence-commit gates are closed; it is **not publicly released or finally submitted** because the public repository/CI, demo video, social post, and DoraHacks Submit action remain.
+CipherGate is deployed to Sepolia with a passing official Docker-backed Nox E2E, a production browser PASS flow, a passing read-only Sepolia smoke test, and a successful advisory JSON import through Safe Transaction Builder. The imported transaction was inspected but not turned into a batch, signed, or executed. The public [repository](https://github.com/Lukeknow0/ciphergate), passing [CI/Pages deployment](https://github.com/Lukeknow0/ciphergate/actions/runs/29625661507), live [frontend](https://lukeknow0.github.io/ciphergate/), and [video release](https://github.com/Lukeknow0/ciphergate/releases/tag/v1.0.0-hackathon) are complete. The required social post and final DoraHacks Submit action remain.
 
 The separate official Hello World journey is complete and independently evidenced on Sepolia. It is not product-deployment evidence.
 
@@ -42,7 +42,7 @@ The separate official Hello World journey is complete and independently evidence
 - Adapted only the Hardhat shared-RPC test harness by binding each submitter wallet client's `getAddresses()` to its own `account.address`; the helper otherwise returns multiple accounts and can make the handle SDK choose the wrong proof subject. This is test-environment account selection, not a production mock of Nox, proofs, encryption, the contract, or policy evaluation.
 - Acquired and ran the official Nox Docker images. After the successful run, restored Containers proxy to `Same as host proxy`, fully restarted Docker Desktop, and verified in the UI that `Same as host proxy = 1`, `Manual = 0`, and `No proxy = 0`. The engine was running, `docker version` returned normal server details, and no Nox/temporary containers remained.
 - Added an MIT license, third-party notices, pinned GitHub Actions definitions, `.nvmrc`, `.env.example`, and Sepolia deploy/read-only-smoke helpers.
-- Created a reviewed initial local commit on `main` after the aggregate check, isolated clean-install reproduction, desktop/mobile QA, security review, diff validation, and secret scan. No public remote or release tag exists.
+- Published the reviewed source to `main`, passed CI run `29625661507` including Docker Nox E2E and Pages deployment, and released `v1.0.0-hackathon` with the 3:32 demo and cover.
 
 ## Resolved Nox gate and troubleshooting history
 
@@ -67,11 +67,11 @@ The official images were subsequently acquired and the full stack ran successful
 - Replay protection is submitter-scoped to avoid mempool-copy denial of service; v1 does not require a Safe-owner signature or prevent different accounts from creating separate intents for the same action. The exported description identifies the verifier, intent ID, and submitter for review.
 - No Safe Guard or Module consumes the commitment. `Create Batch` was not clicked; signing and execution were not performed and remain outside CipherGate.
 
-### B-003 — Source/release and submission packaging are incomplete
+### B-003 — Final social and DoraHacks submission are pending
 
-- Reviewed local source and live-evidence commits exist on `main`; there is no release tag, public remote, or CI run.
+- The source, CI/Pages deployment, and `v1.0.0-hackathon` release are public and linked above.
 - Deployment was performed through Remix/MetaMask rather than `scripts/deploy-sepolia.mjs`. The read-only `scripts/smoke-sepolia.mjs` has run successfully against the live address.
-- The live browser flow was manually verified and a persisted screenshot manifest exists. There is still no automated live-chain browser test, evidence-export script, demo recording, public repository URL, or release artifact.
+- The live browser flow was manually verified, a persisted screenshot manifest exists, and the recorded 3:32 demo is attached to the public release. There is still no automated live-chain browser test or generalized evidence-export script.
 - The current online npm audit reports 16 development/transitive findings (`0` critical, `2` high, `6` moderate, `8` low). They flow through the pinned Nox/Hardhat toolchain and have no compatible direct-dependency fix; no blanket `npm audit fix` was run because it could break the required integration stack.
 
 ## Verification matrix
@@ -103,11 +103,11 @@ The official images were subsequently acquired and the full stack ran successful
 | CipherGate Sepolia deployment and smoke test | PASS |
 | Local Git repository | PASS |
 | Reviewed source commit / clean tree at creation | PASS locally |
-| License / notices / CI definition | CREATED locally; CI NOT RUN |
+| Public repository / CI / Pages | PASS ([run 29625661507](https://github.com/Lukeknow0/ciphergate/actions/runs/29625661507)) |
 | Screenshot manifest | CREATED and hash-indexed |
-| Release tag / demo | NOT CREATED |
+| Release tag / demo | PASS ([v1.0.0-hackathon](https://github.com/Lukeknow0/ciphergate/releases/tag/v1.0.0-hackathon), 3:32) |
 
 ## Next actions
 
-1. Record and verify the maximum-four-minute demo using the persisted live receipts/screenshots; do not sign or execute the imported Safe action.
-2. Only with explicit user approval, publish the repository, run public CI, upload the video, publish the social post, and perform the final DoraHacks Submit action.
+1. With explicit user approval, publish the required X post with the attached demo video and the repository link.
+2. Fill DoraHacks with the public links, then stop immediately before the final Submit action for user confirmation.
